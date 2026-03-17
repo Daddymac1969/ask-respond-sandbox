@@ -279,7 +279,17 @@ exports.handler = async (event) => {
 
     const responseText = extractAnthropicText(data);
 
-    // Logging disabled in sandbox mode
+    // Logging disabled in sandbox
+    /* await logToSheet({
+      question: userQuestion,
+      response: responseText,
+      source: LOG_SOURCE_LABEL,
+      meta: {
+        excerptsUsed: excerpts.length,
+        docIds: unique(excerpts.map((e) => e.doc_id)).join(","),
+        paragraphQuery: isParagraphOnlyQuery(userQuestion) ? "yes" : "no",
+      },
+    }); */
 
     return { statusCode: 200, headers, body: JSON.stringify({ content: responseText }) };
   } catch (err) {

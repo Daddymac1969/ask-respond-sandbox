@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ask RESPOND Pro | Sandbox Demo</title>
+  <title>Ask RESPOND Professional | DSL Consultation</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHBhdGggZmlsbD0iIzFlMjkzYiIgZD0iTTE2IDFMMyA1djEwYzAgOSA1LjUgMTcuMyAxMyAyMCA3LjUtMi43IDEzLTExIDEzLTIwVjVMMTYgMXoiLz4KICA8cGF0aCBmaWxsPSIjMGQ5NDg4IiBkPSJNMTYgNWw5IDN2N2MwIDYuNS00IDEyLjUtOSAxNC41LTUtMi05LTgtOS0xNC41VjhsOS0zeiIvPgogIDx0ZXh0IHg9IjE2IiB5PSIyMSIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkQ8L3RleHQ+Cjwvc3ZnPg==">
   <!-- Preconnect to CDNs for faster loading -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -24,8 +24,8 @@
     .hide-screen-hint { position: absolute; bottom: 20px; font-size: 0.75rem; color: #ccc; }
     
     /* Login Screen */
-    .login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
-    .login-box { background: rgba(255,255,255,0.1); border-radius: 24px; padding: 2.5rem; max-width: 400px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); }
+    .login-screen { min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem; overflow-y: auto; }
+    .login-box { background: rgba(255,255,255,0.1); border-radius: 24px; padding: 2rem; max-width: 580px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); margin: auto; }
     .login-dots { display: flex; justify-content: center; margin-bottom: 1.5rem; }
     .login-dots .respond-dots { gap: 8px; }
     .login-dots .respond-dots .dot { width: 14px; height: 14px; }
@@ -181,7 +181,7 @@
     .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .send-btn svg { width: 20px; height: 20px; fill: currentColor; }
     
-    .footer { text-align: center; padding: 0.75rem; color: rgba(255,255,255,0.75); font-size: 0.75rem; flex-shrink: 0; }
+    .footer { text-align: center; padding: 0.75rem; color: rgba(255,255,255,0.95); font-size: 0.75rem; flex-shrink: 0; }
     
     @media (max-width: 768px) {
       .ex-grid { grid-template-columns: 1fr; }
@@ -669,8 +669,7 @@
       text-align: center;
     }
     .contact-footer a {
-      color: #0d9488;
-      text-decoration: underline;
+      color: #1e293b;
     }
     .form-success {
       text-align: center;
@@ -780,9 +779,7 @@
   </style>
 </head>
 <body>
-<div style="background:#f59e0b;color:#1e293b;text-align:center;padding:8px 16px;font-size:0.82rem;font-weight:600;letter-spacing:0.03em;z-index:9999;position:relative;">
-  &#9888; SANDBOX DEMO &nbsp;|&nbsp; This is a demonstration version of Ask RESPOND Pro. Data entered here is not monitored. &nbsp;|&nbsp; <a href="mailto:darren@respondsafeguarding.org" target="_blank" rel="noopener noreferrer" style="color:#1e293b;text-decoration:underline;">Request full access</a>
-</div>
+<div style="background:#f59e0b;color:#1e293b;text-align:center;padding:8px 16px;font-size:0.82rem;font-weight:600;letter-spacing:0.03em;z-index:9999;position:relative;">&#9888; SANDBOX DEMO &nbsp;|&nbsp; Demonstration version of Ask RESPOND Pro. Data not monitored. &nbsp;|&nbsp; <a href="mailto:darren@respondsafeguarding.org" target="_blank" rel="noopener noreferrer" style="color:#1e293b;text-decoration:underline;">Request full access</a></div>
 
 
 <!-- Quick Hide Screen (Press Escape to activate, click anywhere to return) -->
@@ -819,7 +816,7 @@
           <div class="ep-contact-links">
             <a class="ep-link phone" href="tel:+440000000000"><i class="fa-solid fa-phone"></i> School main line</a>
             <a class="ep-link mobile" href="tel:+440000000000"><i class="fa-solid fa-mobile-screen"></i> Mobile (on request)</a>
-            <a class="ep-link email" href="mailto:dsl@yourschool.org"><i class="fa-solid fa-envelope"></i> dsl@</a>
+            <a class="ep-link email" href="mailto:dsl@yourschool.org"><i class="fa-solid fa-envelope"></i> jtait@</a>
           </div>
         </div>
         <div class="ep-contact">
@@ -828,7 +825,7 @@
           <div class="ep-contact-links">
             <a class="ep-link phone" href="tel:+440000000000"><i class="fa-solid fa-phone"></i> School main line</a>
             <a class="ep-link mobile" href="tel:+440000000000"><i class="fa-solid fa-mobile-screen"></i> Mobile (on request)</a>
-            <a class="ep-link email" href="mailto:ddsl1@yourschool.org"><i class="fa-solid fa-envelope"></i> ddsl1@</a>
+            <a class="ep-link email" href="mailto:ddsl1@yourschool.org"><i class="fa-solid fa-envelope"></i> jvinton@</a>
           </div>
         </div>
         <div class="ep-contact">
@@ -837,7 +834,7 @@
           <div class="ep-contact-links">
             <a class="ep-link phone" href="tel:+440000000000"><i class="fa-solid fa-phone"></i> School main line</a>
             <a class="ep-link mobile" href="tel:+440000000000"><i class="fa-solid fa-mobile-screen"></i> Mobile (on request)</a>
-            <a class="ep-link email" href="mailto:ddsl2@yourschool.org"><i class="fa-solid fa-envelope"></i> ddsl2@</a>
+            <a class="ep-link email" href="mailto:ddsl2@yourschool.org"><i class="fa-solid fa-envelope"></i> mrust@</a>
           </div>
         </div>
         <div class="ep-contact">
@@ -846,7 +843,7 @@
           <div class="ep-contact-links">
             <a class="ep-link phone" href="tel:+440000000000"><i class="fa-solid fa-phone"></i> School main line</a>
             <a class="ep-link mobile" href="tel:+440000000000"><i class="fa-solid fa-mobile-screen"></i> Mobile (on request)</a>
-            <a class="ep-link email" href="mailto:ddsl3@yourschool.org"><i class="fa-solid fa-envelope"></i> ddsl3@</a>
+            <a class="ep-link email" href="mailto:ddsl3@yourschool.org"><i class="fa-solid fa-envelope"></i> mjordan@</a>
           </div>
         </div>
       </div>
@@ -858,7 +855,7 @@
           <div class="ep-contact-links">
             <a class="ep-link phone" href="tel:+440000000000"><i class="fa-solid fa-phone"></i> School main line</a>
             <a class="ep-link mobile" href="tel:+440000000000"><i class="fa-solid fa-mobile-screen"></i> Mobile (on request)</a>
-            <a class="ep-link email" href="mailto:nurse@yourschool.org"><i class="fa-solid fa-envelope"></i> nurse@yourschool.org</a>
+            <a class="ep-link email" href="mailto:nurse@yourschool.org"><i class="fa-solid fa-envelope"></i> nurse@tasisengland.org</a>
           </div>
         </div>
       </div>
@@ -931,7 +928,8 @@
           </label>
         </div>
         
-        <div style="font-size:0.78rem;color:rgba(255,255,255,0.8);line-height:1.6;background:rgba(255,255,255,0.08);border-radius:10px;padding:0.9rem 1rem;margin:1rem 0;">
+        
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.8);line-height:1.6;background:rgba(255,255,255,0.08);border-radius:10px;padding:0.9rem 1rem;margin:1rem 0;text-align:left;">
           <strong style="display:block;margin-bottom:0.35rem;color:rgba(255,255,255,0.95);">Privacy &amp; Data Notice</strong>
           This is a sandbox demonstration. Do not enter personally identifiable information or real case data.
           Conversations are not stored or monitored in this version.
@@ -953,7 +951,7 @@
       <p class="login-note">Contact darren@respondsafeguarding.org if you need access credentials.</p>
     </div>
 <div class="login-footer">
-  <span>© 2026 TASIS England &amp; RESPOND Safeguarding</span>
+  <span>© 2026 TASIS England &amp; RESPOND Safeguarding - Part of TASIS England</span>
   <a href="https://www.respondsafeguarding.org" target="_blank" rel="noopener noreferrer" class="footer-logo-link">
     <span style="font-weight:700;font-size:1rem;color:#1e293b;letter-spacing:0.05em;">RESPOND</span>
   </a>
@@ -993,7 +991,7 @@
 
   <!-- Pilot Banner -->
   <div class="pilot-banner">
-    SANDBOX DEMO — This is a demonstration version of Ask RESPOND Pro. For enquiries contact <a href="mailto:darren@respondsafeguarding.org" target="_blank" rel="noopener noreferrer">darren@respondsafeguarding.org</a>
+    PILOT VERSION 1.28.030326 — For experienced DSLs and safeguarding leads. Report feedback to <a href="mailto:darren@respondsafeguarding.org" target="_blank" rel="noopener noreferrer">darren@respondsafeguarding.org</a>
   </div>
 
   <!-- Accessibility Panel -->
@@ -1170,7 +1168,7 @@
   <footer class="footer">© 2026 TASIS England &amp; RESPOND Safeguarding</footer>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false">
+<script>
 document.addEventListener('DOMContentLoaded', function() {
   // Password is verified server-side - not stored in client code
   let history = [];
@@ -2440,15 +2438,201 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <div class="confidential">CONFIDENTIAL — This document may contain sensitive safeguarding information</div>
       
-  <script>
-    // Open darren@ contact emails in a new window
-    document.addEventListener('click', function(e) {
-      var a = e.target.closest('a[href^="mailto:darren@respondsafeguarding.org"]');
-      if (a) {
-        e.preventDefault();
-        window.open(a.href, '_blank', 'width=700,height=500,noopener,noreferrer');
+<script>
+  document.addEventListener('click', function(e) {
+    var a = e.target.closest('a[href^="mailto:darren@respondsafeguarding.org"]');
+    if (a) { e.preventDefault(); window.open(a.href, '_blank', 'width=700,height=500,noopener,noreferrer'); }
+  });
+</script>
+</body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+  }
+  
+  // Copy function - copies full conversation
+  function copyResponse(content, button) {
+    // Gather all messages in the conversation
+    const allMessages = document.querySelectorAll('.msg-user, .msg-bot');
+    let fullText = 'ASK RESPOND - SAFEGUARDING GUIDANCE\n';
+    fullText += 'Generated: ' + new Date().toLocaleString() + '\n';
+    fullText += '='.repeat(50) + '\n\n';
+    
+    allMessages.forEach(msg => {
+      if (msg.classList.contains('msg-user')) {
+        const userText = msg.querySelector('.bubble-user')?.textContent || '';
+        fullText += '[QUESTION]\n' + userText + '\n\n';
+      } else if (msg.classList.contains('msg-bot')) {
+        const botBubble = msg.querySelector('.bubble-bot');
+        if (botBubble && !botBubble.querySelector('.typing-dots')) {
+          // Get text content, stripping buttons
+          const clone = botBubble.cloneNode(true);
+          const actionsEl = clone.querySelector('.msg-actions');
+          if (actionsEl) actionsEl.remove();
+          let botText = clone.textContent || clone.innerText;
+          // Clean up extra whitespace
+          botText = botText.replace(/\s+/g, ' ').trim();
+          fullText += '[RESPOND GUIDANCE]\n' + botText + '\n\n';
+          fullText += '-'.repeat(50) + '\n\n';
+        }
       }
     });
-  </script>
+    
+    fullText += '[!] IMPORTANT: This guidance is for reference only.\n';
+    fullText += 'You remain accountable for threshold decisions and referrals.\n';
+    
+    navigator.clipboard.writeText(fullText).then(() => {
+      const originalHTML = button.innerHTML;
+      button.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+      button.style.color = '#10b981';
+      setTimeout(() => {
+        button.innerHTML = originalHTML;
+        button.style.color = '';
+      }, 2000);
+    }).catch(() => {
+      button.innerHTML = '<i class="fa-solid fa-xmark"></i> Failed';
+      setTimeout(() => {
+        button.innerHTML = '<i class="fa-solid fa-copy"></i> Copy';
+      }, 2000);
+    });
+  }
+  
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    // Don't trigger shortcuts when typing in input/textarea/select
+    const activeEl = document.activeElement;
+    const isInput = activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT';
+    
+    if (isInput) {
+      if (e.key === 'Escape') {
+        activeEl.blur();
+        if (contactOverlay.classList.contains('active')) {
+          closeContactModal();
+        }
+        if (speechSynthesis) speechSynthesis.cancel();
+      }
+      return;
+    }
+    
+    // Global shortcuts
+    switch(e.key.toLowerCase()) {
+      case 'a':
+        if (!e.ctrlKey && !e.metaKey) {
+          e.preventDefault();
+          if (a11yOverlay.classList.contains('open')) {
+            closeA11yPanel();
+          } else {
+            openA11yPanel();
+          }
+        }
+        break;
+      case 'm':
+        if (!e.ctrlKey && !e.metaKey && micBtn && !micBtn.disabled) {
+          e.preventDefault();
+          micBtn.click();
+        }
+        break;
+      case 's':
+        if (!e.ctrlKey && !e.metaKey && speakerBtn && !speakerBtn.disabled) {
+          e.preventDefault();
+          speakerBtn.click();
+        }
+        break;
+      case 'p':
+        if (!e.ctrlKey && !e.metaKey) {
+          e.preventDefault();
+          // Print full conversation
+          const anyBotMessage = document.querySelector('.msg-bot .bubble-bot');
+          if (anyBotMessage) printResponse(anyBotMessage);
+        }
+        break;
+      case 'c':
+        if (!e.ctrlKey && !e.metaKey) {
+          e.preventDefault();
+          // Copy full conversation
+          const copyBtn = document.querySelector('.msg-bot:last-of-type .copy-btn');
+          if (copyBtn) copyBtn.click();
+        }
+        break;
+      case 'n':
+        if (!e.ctrlKey && !e.metaKey) {
+          e.preventDefault();
+          clearBtn.click();
+        }
+        break;
+      case '/':
+        e.preventDefault();
+        questionInput.focus();
+        break;
+      case 'escape':
+        if (contactOverlay.classList.contains('active')) {
+          closeContactModal();
+        } else if (a11yOverlay.classList.contains('open')) {
+          closeA11yPanel();
+        } else if (!hideScreen.classList.contains('active')) {
+          // Show hide screen (quick hide feature like CPOMS)
+          hideScreen.classList.add('active');
+          if (speechSynthesis) speechSynthesis.cancel();
+        }
+        break;
+    }
+  });
+  
+  // Quick Hide Screen handlers
+  const hideScreen = document.getElementById('hideScreen');
+  
+  // Click anywhere on hide screen to dismiss
+  hideScreen.addEventListener('click', () => {
+    hideScreen.classList.remove('active');
+  });
+  
+  // Any key press dismisses hide screen (except Escape which would re-trigger)
+  document.addEventListener('keydown', (e) => {
+    if (hideScreen.classList.contains('active') && e.key !== 'Escape') {
+      hideScreen.classList.remove('active');
+    }
+  }, true); // Use capture to catch before other handlers
+  
+  // Initialize accessibility preferences on load
+  loadA11yPreferences();
+  
+  // ARIA live region for screen readers
+  const liveRegion = document.createElement('div');
+  liveRegion.setAttribute('aria-live', 'polite');
+  liveRegion.setAttribute('aria-atomic', 'true');
+  liveRegion.className = 'sr-only';
+  liveRegion.style.cssText = 'position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;';
+  document.body.appendChild(liveRegion);
+  
+  // Announce new messages to screen readers
+  function announceToScreenReader(message) {
+    liveRegion.textContent = message;
+    setTimeout(() => { liveRegion.textContent = '';
+    }, 1000);
+  }
 
+  // ===== EMERGENCY SLIDE-OUT TAB =====
+  const emergencyTab = document.getElementById('emergencyTab');
+  const emergencyTabTrigger = document.getElementById('emergencyTabTrigger');
+  const emergencyClose = document.getElementById('emergencyClose');
+
+  emergencyTabTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    emergencyTab.classList.toggle('open');
+  });
+  emergencyClose.addEventListener('click', (e) => {
+    e.stopPropagation();
+    emergencyTab.classList.remove('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (emergencyTab.classList.contains('open') && !emergencyTab.contains(e.target)) {
+      emergencyTab.classList.remove('open');
+    }
+  });
+
+}); // end DOMContentLoaded
+</script>
 </body>
+</html>
