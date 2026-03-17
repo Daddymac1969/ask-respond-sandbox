@@ -1,4 +1,5 @@
 [build]
+  command = "node scripts/build-doc-index.js"
   functions = "netlify/functions"
   publish = "."
 
