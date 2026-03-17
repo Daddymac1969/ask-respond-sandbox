@@ -11,9 +11,16 @@ exports.handler = async (event) => {
   }
 
   const validPasswords = [
-    process.env.PRO_ACCESS_PASSWORD,
-    process.env.PRO_ACCESS_PASSWORD_2,
-    process.env.PRO_ACCESS_PASSWORD_3,
+    process.env.ACCESS_CODE_1,   // RESPOND-DEMO
+    process.env.ACCESS_CODE_2,   // DSLDEMO26
+    process.env.ACCESS_CODE_3,   // TRYRSPND
+    process.env.ACCESS_CODE_4,   // PROTEST26
+    process.env.ACCESS_CODE_5,   // SAFEGUARD1
+    process.env.ACCESS_CODE_6,   // KCSIE2025
+    process.env.ACCESS_CODE_7,   // ACTMODEL
+    process.env.ACCESS_CODE_8,   // THRESHOLD
+    process.env.ACCESS_CODE_9,   // DUTYOFCARE
+    process.env.ACCESS_CODE_10,  // PILOTDSL
   ].filter(Boolean);
 
   if (validPasswords.length === 0) {
