@@ -1,42 +1,47 @@
-# Ask RESPOND Pro
+# Ask RESPOND Pro — Sandbox Demo
 
-Advanced consultation tool for experienced DSLs and senior safeguarding professionals.
+Anonymised public demo of the Ask RESPOND Pro safeguarding consultation tool.
+
+## Purpose
+
+This sandbox allows potential partner schools and safeguarding leads to experience Ask RESPOND Pro without access credentials. All school-specific information, staff details, and logging have been removed. Users are instructed not to enter real case information.
 
 ## Deployment
 
-1. Deploy to Netlify (drag and drop or connect Git)
-2. Set environment variables:
-   - `ANTHROPIC_API_KEY` - Your Claude API key
-   - `PRO_ACCESS_PASSWORD` - Access password for DSL professionals
+1. Push this repo to GitHub
+2. Connect to Netlify (New site from Git)
+3. Set the following environment variable in Netlify Dashboard > Site settings > Environment variables:
 
-## Features
+```
+ANTHROPIC_API_KEY = your_anthropic_api_key_here
+```
 
-- Threshold decision support (Section 17 vs 47)
-- LADO consultation guidance
-- Multi-agency coordination
-- Complex case analysis frameworks
-- Information sharing guidance
-- Strategy meeting preparation
-- Risk assessment frameworks
+4. No build command required — deploy publishes the root directory directly.
 
-## Audience
+## What's been removed from the production version
 
-This tool is designed for:
-- Designated Safeguarding Leads (DSLs)
-- Deputy DSLs
-- Safeguarding Governors
-- Senior leaders with safeguarding responsibility
-- Multi-agency safeguarding professionals
+- Login / access code gate
+- Google Sheets usage logging
+- School-specific staff contacts (emergency panel shows national helplines only)
+- TASIS England branding and logo
+- Contact form (Netlify function removed)
+- Pilot version banner and internal feedback email
 
-## Difference from Ask RESPOND (Staff)
+## What's retained
 
-| Staff Tool | Pro Tool |
-|------------|----------|
-| Explains basics | Assumes statutory knowledge |
-| "Share with DSL" | Supports DSL decision-making |
-| Reassuring tone | Peer consultation tone |
-| Simple guidance | Complex case analysis |
+- Full RESPOND system prompt (PRO v2.2)
+- Priority classification system (RED / AMBER / GREEN / BLUE / GREY)
+- KCSIE and Working Together document retrieval (requires doc_index.json — see note below)
+- Voice input / output
+- Accessibility panel
+- Print and copy conversation
+- Quick hide screen (Esc)
 
-## Contact
+## Document index
 
-darren@respondsafeguarding.org
+The production version includes a pre-built `data/doc_index.json` (KCSIE 2025 and Working Together 2023 indexed for retrieval). If you have this file, place it at `data/doc_index.json` in the root. Without it, the tool operates on the system prompt alone — still fully functional.
+
+## Framework
+
+RESPOND Safeguarding — respondsafeguarding.org  
+© 2026 RESPOND Safeguarding

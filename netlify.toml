@@ -7,10 +7,7 @@
   external_node_modules = ["https"]
 
 [functions."chat"]
-  timeout = 26
-
-[functions."contact"]
-  timeout = 10
+  timeout = 30
 
 [functions."auth"]
   timeout = 10
@@ -18,8 +15,9 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "DENY"
+    X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
 
 [[headers]]
   for = "/index.html"
