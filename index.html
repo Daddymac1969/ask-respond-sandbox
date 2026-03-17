@@ -24,8 +24,8 @@
     .hide-screen-hint { position: absolute; bottom: 20px; font-size: 0.75rem; color: #ccc; }
     
     /* Login Screen */
-    .login-screen { min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem; overflow-y: auto; }
-    .login-box { background: rgba(255,255,255,0.1); border-radius: 24px; padding: 2rem; max-width: 580px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); margin: auto; }
+    .login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .login-box { background: rgba(255,255,255,0.1); border-radius: 24px; padding: 2.5rem; max-width: 400px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); }
     .login-dots { display: flex; justify-content: center; margin-bottom: 1.5rem; }
     .login-dots .respond-dots { gap: 8px; }
     .login-dots .respond-dots .dot { width: 14px; height: 14px; }
@@ -2452,25 +2452,15 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <div class="confidential">CONFIDENTIAL — This document may contain sensitive safeguarding information</div>
       
-      </html>
-    `);
-    printWindow.document.close();
-    setTimeout(() => { try { printWindow.print(); } catch(e) {} }, 300);
-  }
-
-}); // end DOMContentLoaded
-</script>
-
-<script>
-  // Open darren@ contact emails in a new window
-  document.addEventListener('click', function(e) {
-    var a = e.target.closest('a[href^="mailto:darren@respondsafeguarding.org"]');
-    if (a) {
-      e.preventDefault();
-      window.open(a.href, '_blank', 'width=700,height=500,noopener,noreferrer');
-    }
-  });
-</script>
+  <script>
+    // Open darren@ contact emails in a new window
+    document.addEventListener('click', function(e) {
+      var a = e.target.closest('a[href^="mailto:darren@respondsafeguarding.org"]');
+      if (a) {
+        e.preventDefault();
+        window.open(a.href, '_blank', 'width=700,height=500,noopener,noreferrer');
+      }
+    });
+  </script>
 
 </body>
-</html>
