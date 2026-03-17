@@ -31,7 +31,7 @@ exports.handler = async (event, context) => {
     }
 
     // Email address to receive submissions - CHANGE THIS TO YOUR EMAIL
-    const RECIPIENT_EMAIL = process.env.CONTACT_EMAIL || 'demo@respondsafeguarding.org';
+    const RECIPIENT_EMAIL = process.env.CONTACT_EMAIL || 'darren@respondsafeguarding.org';
 
     // Send via FormSubmit.co (free, no signup required)
     const emailResponse = await fetch(`https://formsubmit.co/ajax/${RECIPIENT_EMAIL}`, {

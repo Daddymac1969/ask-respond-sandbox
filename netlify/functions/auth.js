@@ -1,6 +1,4 @@
 // Netlify serverless function for password verification
-// Passwords are stored as environment variables - never exposed to client
-
 const https = require("https");
 
 const GOOGLE_SHEET_URL =
@@ -10,10 +8,7 @@ const GOOGLE_SHEET_URL =
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      body: JSON.stringify({ error: "Method not allowed" }),
-    };
+    return { statusCode: 405, body: JSON.stringify({ error: "Method not allowed" }) };
   }
 
   const codeMap = [
@@ -30,57 +25,33 @@ exports.handler = async (event) => {
   ].filter(c => c.value);
 
   if (codeMap.length === 0) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Access password not configured" }),
-    };
+    return { statusCode: 500, body: JSON.stringify({ error: "Access password not configured" }) };
   }
 
   try {
     const { password } = JSON.parse(event.body || "{}");
-
     if (!password) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ success: false, error: "Password required" }),
-      };
+      return { statusCode: 400, body: JSON.stringify({ success: false, error: "Password required" }) };
     }
-
     const matched = codeMap.find(c => c.value === password);
     const isValid = !!matched;
-
-    if (isValid) {
-      // Log login event only — no content logged
-      logLogin(matched.env).catch(() => {});
-    }
-
+    if (isValid) logLogin(matched.env).catch(() => {});
     return {
       statusCode: isValid ? 200 : 401,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(
-        isValid
-          ? { success: true }
-          : { success: false, error: "Invalid password" }
-      ),
+      body: JSON.stringify(isValid ? { success: true } : { success: false, error: "Invalid password" })
     };
   } catch {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ success: false, error: "Invalid request" }),
-    };
+    return { statusCode: 400, body: JSON.stringify({ success: false, error: "Invalid request" }) };
   }
 };
 
 async function logLogin(codeLabel) {
   try {
     const params = new URLSearchParams({
-      question: `[LOGIN] ${codeLabel}`,
-      response: "",
-      source: "SANDBOX-LOGIN",
-      meta: "",
-      ts: new Date().toISOString(),
+      question: "[LOGIN] " + codeLabel, response: "", source: "SANDBOX-LOGIN", meta: "", ts: new Date().toISOString()
     });
-    const url = `${GOOGLE_SHEET_URL}?${params.toString()}`;
+    const url = GOOGLE_SHEET_URL + "?" + params.toString();
     return new Promise((resolve) => {
       https.get(url, (res) => {
         if (res.statusCode === 301 || res.statusCode === 302) {
@@ -90,7 +61,5 @@ async function logLogin(codeLabel) {
         } else resolve();
       }).on("error", () => resolve());
     });
-  } catch {
-    // fail silently
-  }
+  } catch { }
 }
