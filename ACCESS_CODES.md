@@ -14,5 +14,3 @@ Set each as an environment variable in Netlify: Site > Environment variables
 | ACCESS_CODE_8   | THRESHOLD     |           |
 | ACCESS_CODE_9   | DUTYOFCARE    |           |
 | ACCESS_CODE_10  | PILOTDSL      |           |
-
-Fill in "Assign to" as you share codes. Unset codes are automatically ignored.

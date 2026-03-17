@@ -776,18 +776,6 @@
       }
       .priority-banner { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
-
-    /* RESPOND dots loading animation */
-    .respond-loading { display: flex; gap: 5px; align-items: center; padding: 4px 0; }
-    .respond-loading .dot { width: 10px; height: 10px; border-radius: 50%; opacity: 0.15; animation: respondPulse 1.4s infinite ease-in-out both; }
-    .respond-loading .dot-r { background: #0f172a; animation-delay: 0s; }
-    .respond-loading .dot-e { background: #235e4b; animation-delay: 0.2s; }
-    .respond-loading .dot-s { background: #a4684e; animation-delay: 0.4s; }
-    .respond-loading .dot-p { background: #cd372b; animation-delay: 0.6s; }
-    .respond-loading .dot-o { background: #ebaf24; animation-delay: 0.8s; }
-    .respond-loading .dot-n { background: #287bc9; animation-delay: 1.0s; }
-    .respond-loading .dot-d { background: #8625eb; animation-delay: 1.2s; }
-    @keyframes respondPulse { 0%, 60%, 100% { opacity: 0.15; transform: scale(0.8); } 30% { opacity: 1; transform: scale(1.2); } }
   </style>
 </head>
 <body>
@@ -1476,7 +1464,7 @@ document.addEventListener('DOMContentLoaded', function() {
     div.innerHTML = `
       <div class="avatar"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
       <div class="bubble bubble-bot streaming-bubble">
-        <div class="streaming-content"><div class="respond-loading"><div class="dot dot-r"></div><div class="dot dot-e"></div><div class="dot dot-s"></div><div class="dot dot-p"></div><div class="dot dot-o"></div><div class="dot dot-n"></div><div class="dot dot-d"></div></div></div>
+        <div class="streaming-content"><span class="loading-dots"><span>.</span><span>.</span><span>.</span></span></div>
         <span class="streaming-cursor" style="display:none;">▊</span>
       </div>
     `;
