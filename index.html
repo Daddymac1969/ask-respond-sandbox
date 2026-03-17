@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ask RESPOND Pro | Sandbox Demo</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHBhdGggZmlsbD0iIzFlMjkzYiIgZD0iTTE2IDFMMyA1djEwYzAgOSA1LjUgMTcuMyAxMyAyMCA3LjUtMi43IDEzLTExIDEzLTIwVjVMMTYgMXoiLz4KICA8cGF0aCBmaWxsPSIjMGQ5NDg4IiBkPSJNMTYgNWw5IDN2N2MwIDYuNS00IDEyLjUtOSAxNC41LTUtMi05LTgtOS0xNC41VjhsOS0zeiIvPgogIDx0ZXh0IHg9IjE2IiB5PSIyMSIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkQ8L3RleHQ+Cjwvc3ZnPg==">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #1e293b 0%, #334155 100%); overflow-x: hidden; }
+
+    /* Quick Hide Screen */
+    .hide-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f5f5f5; z-index: 99999; display: none; align-items: center; justify-content: center; flex-direction: column; cursor: pointer; }
+    .hide-screen.active { display: flex; }
+    .hide-screen-content { text-align: center; color: #999; }
+    .hide-screen-content i { font-size: 3rem; margin-bottom: 1rem; }
+    .hide-screen-content p { font-size: 0.9rem; }
+    .hide-screen-hint { position: absolute; bottom: 20px; font-size: 0.75rem; color: #ccc; }
+
+    /* Login Screen */
+    .login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .login-box { background: rgba(255,255,255,0.1); border-radius: 24px; padding: 2.5rem; max-width: 420px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); }
+    .login-dots { display: flex; justify-content: center; margin-bottom: 1.5rem; }
+    .login-dots .respond-dots { gap: 8px; }
+    .login-dots .respond-dots .dot { width: 14px; height: 14px; }
+    .login-title { color: white; font-size: 1.75rem; margin-bottom: 0.4rem; font-weight: 700; }
+    .login-subtitle { color: rgba(255,255,255,0.7); font-size: 1rem; margin-bottom: 0.5rem; }
+    .login-sandbox-badge { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(15,118,110,0.4); border: 1px solid rgba(15,118,110,0.7); color: rgba(255,255,255,0.9); font-size: 0.78rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: 20px; margin-bottom: 1.75rem; letter-spacing: 0.04em; }
+    .login-label { display: block; color: rgba(255,255,255,0.8); font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 500; text-align: left; }
+    .login-input { width: 100%; padding: 0.875rem 1rem; font-size: 1.05rem; border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; background: rgba(255,255,255,0.1); color: white; outline: none; margin-bottom: 0.4rem; letter-spacing: 0.08em; text-transform: uppercase; font-family: inherit; }
+    .login-input::placeholder { color: rgba(255,255,255,0.4); letter-spacing: 0; text-transform: none; }
+    .login-input.error { border-color: #ef4444; background: rgba(239,68,68,0.1); }
+    .login-input:focus { border-color: rgba(255,255,255,0.5); }
+    .login-error { color: #fca5a5; font-size: 0.85rem; margin-bottom: 0.25rem; min-height: 1.25rem; }
+    .login-disclaimer { background: rgba(255,255,255,0.07); border-radius: 12px; padding: 0.875rem 1rem; margin: 1rem 0; text-align: left; }
+    .login-disclaimer p { color: rgba(255,255,255,0.75); font-size: 0.8rem; line-height: 1.6; margin-bottom: 0.6rem; }
+    .login-disclaimer p:last-child { margin-bottom: 0; }
+    .login-disclaimer i { color: #fbbf24; margin-right: 0.4rem; }
+    .login-disclaimer i.fa-circle-info { color: #60a5fa; }
+    .checkbox-label { display: flex; align-items: flex-start; gap: 0.6rem; color: rgba(255,255,255,0.85); font-size: 0.85rem; cursor: pointer; line-height: 1.5; }
+    .checkbox-label input { width: 18px; height: 18px; cursor: pointer; accent-color: #3b82f6; flex-shrink: 0; margin-top: 1px; }
+    .login-btn { width: 100%; padding: 1rem; font-size: 1rem; font-weight: 600; background: white; color: #1e293b; border: none; border-radius: 12px; cursor: pointer; margin-top: 1rem; transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s; }
+    .login-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
+    .login-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .login-footer { color: rgba(255,255,255,0.4); font-size: 0.75rem; margin-top: 1.75rem; text-align: center; }
+    .login-footer a { color: rgba(255,255,255,0.55); text-decoration: none; }
+    .login-footer a:hover { color: rgba(255,255,255,0.8); }
+
+    /* Chat Interface */
+    .chat-container { display: none; flex-direction: column; height: 100vh; overflow: hidden; }
+    .chat-container.show { display: flex; }
+
+    .header { background: rgba(30,41,59,0.95); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 0.75rem; color: white; }
+    .logo-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .logo-icon svg { width: 24px; height: 24px; fill: white; }
+    .logo-text { font-size: 1.5rem; font-weight: 700; }
+    .clear-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: none; }
+    .clear-btn.show { display: block; }
+    .clear-btn:hover { background: rgba(255,255,255,0.25); }
+
+    /* Sandbox Banner */
+    .sandbox-banner { background: linear-gradient(90deg, #0f766e 0%, #0d9488 100%); color: white; text-align: center; padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 500; }
+    .sandbox-banner a { color: rgba(255,255,255,0.9); text-decoration: underline; }
+    .sandbox-banner a:hover { color: white; }
+
+    .chat-area { flex: 1; display: flex; flex-direction: column; max-width: 900px; width: 100%; margin: 0 auto; padding: 0 1.5rem; min-height: 0; }
+    .messages { flex: 1; overflow-y: auto; padding: 1rem 0 2rem 0; scroll-behavior: smooth; }
+
+    /* Welcome Screen */
+    .welcome { text-align: center; padding: 2rem 1rem; color: white; }
+    .welcome-dots { display: flex; justify-content: center; margin-bottom: 1.5rem; }
+    .welcome-dots .respond-dots { gap: 8px; }
+    .welcome-dots .respond-dots .dot { width: 14px; height: 14px; }
+    .welcome h2 { font-size: 1.75rem; margin-bottom: 0.75rem; }
+    .welcome p { opacity: 0.8; max-width: 500px; margin: 0 auto 1.5rem; line-height: 1.6; }
+    .note { background: rgba(255,255,255,0.1); border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.85rem; max-width: 500px; margin: 0 auto 2rem; }
+    .ex-label { font-size: 0.9rem; opacity: 0.7; margin-bottom: 1rem; }
+    .ex-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; max-width: 650px; margin: 0 auto; }
+    .ex-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 0.75rem 1rem; border-radius: 10px; font-size: 0.85rem; cursor: pointer; text-align: left; line-height: 1.4; transition: all 0.2s; }
+    .ex-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+    /* Messages */
+    .msg-user { display: flex; justify-content: flex-end; margin-bottom: 1.25rem; animation: fadeIn 0.3s ease; }
+    .msg-bot { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 1.25rem; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .avatar { width: 36px; height: 36px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .avatar svg { width: 20px; height: 20px; fill: white; }
+
+    /* RESPOND 7-dot brand mark */
+    .respond-dots { display: flex; gap: 5px; align-items: center; }
+    .respond-dots .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .respond-dots.large .dot { width: 12px; height: 12px; }
+    .respond-dots.small .dot { width: 8px; height: 8px; gap: 4px; }
+    .dot-r { background: #0f172a; }
+    .dot-e { background: #235e4b; }
+    .dot-s { background: #a4684e; }
+    .dot-p { background: #cd372b; }
+    .dot-o { background: #ebaf24; }
+    .dot-n { background: #287bc9; }
+    .dot-d { background: #8625eb; }
+
+    .bubble { padding: 1rem 1.25rem; max-width: 80%; font-size: 0.95rem; line-height: 1.7; }
+    .bubble-user { background: white; color: #1a1a1a; border-radius: 16px 16px 4px 16px; }
+    .bubble-bot { background: rgba(255,255,255,0.98); color: #1a1a1a; border-radius: 16px 16px 16px 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 4px solid transparent; }
+    .bubble-bot p { margin-bottom: 0.75rem; }
+    .bubble-bot p:last-child { margin-bottom: 0; }
+    .bubble-bot ul, .bubble-bot ol { margin: 0.75rem 0; padding-left: 1.5rem; }
+    .bubble-bot li { margin-bottom: 0.4rem; }
+    .bubble-bot strong { color: #1e293b; }
+    .bubble-bot h4 { color: #1e293b; font-size: 1rem; margin: 1rem 0 0.5rem; }
+    .bubble-bot h4:first-child { margin-top: 0; }
+    .bubble-bot code { background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
+    .bubble-error { background: rgba(239, 68, 68, 0.2); color: white; }
+    .streaming-bubble { min-height: 40px; }
+    .streaming-cursor { display: inline-block; animation: blink 0.8s infinite; color: #1e293b; font-weight: bold; }
+    @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+    .streaming-content { display: inline; }
+    .loading-dots span { animation: loadingDot 1.4s infinite; opacity: 0; font-size: 1.5em; color: #1e293b; }
+    .loading-dots span:nth-child(1) { animation-delay: 0s; }
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes loadingDot { 0%, 60%, 100% { opacity: 0; } 30% { opacity: 1; } }
+    .retry-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 8px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+    .retry-btn:hover { background: rgba(255,255,255,0.25); }
+
+    /* RAG Priority Banners */
+    .priority-banner { display: flex; align-items: center; gap: 0.75rem; padding: 0.875rem 1rem; border-radius: 10px; margin-bottom: 1rem; font-weight: 600; font-size: 0.9rem; }
+    .priority-banner i { font-size: 1.1rem; }
+    .priority-red { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3); }
+    .priority-amber { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3); }
+    .priority-green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3); }
+    .priority-blue { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3); }
+    .priority-grey { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3); }
+
+    /* RAG Priority Bubble Backgrounds */
+    .bubble-priority-red { background: linear-gradient(180deg, rgba(254,226,226,1) 0%, rgba(254,242,242,0.95) 15%, rgba(255,255,255,0.98) 100%); border-left: 5px solid #dc2626 !important; box-shadow: 0 2px 12px rgba(220,38,38,0.15); }
+    .bubble-priority-amber { background: linear-gradient(180deg, rgba(254,243,199,1) 0%, rgba(255,251,235,0.95) 15%, rgba(255,255,255,0.98) 100%); border-left: 5px solid #f59e0b !important; box-shadow: 0 2px 12px rgba(245,158,11,0.15); }
+    .bubble-priority-green { background: linear-gradient(180deg, rgba(209,250,229,1) 0%, rgba(236,253,245,0.95) 15%, rgba(255,255,255,0.98) 100%); border-left: 5px solid #10b981 !important; box-shadow: 0 2px 12px rgba(16,185,129,0.15); }
+    .bubble-priority-blue { background: linear-gradient(180deg, rgba(219,234,254,1) 0%, rgba(239,246,255,0.95) 15%, rgba(255,255,255,0.98) 100%); border-left: 5px solid #3b82f6 !important; box-shadow: 0 2px 12px rgba(59,130,246,0.15); }
+    .bubble-priority-grey { background: linear-gradient(180deg, rgba(243,244,246,1) 0%, rgba(249,250,251,0.95) 15%, rgba(255,255,255,0.98) 100%); border-left: 5px solid #6b7280 !important; box-shadow: 0 2px 12px rgba(107,114,128,0.15); }
+
+    /* Typing Indicator */
+    .typing-dots { display: flex; gap: 4px; padding: 4px 0; }
+    .typing-dots span { width: 8px; height: 8px; background: #334155; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; }
+    .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes bounce { 0%, 80%, 100% { transform: scale(0); opacity: 0.5; } 40% { transform: scale(1); opacity: 1; } }
+
+    /* Input Area */
+    .input-area { padding: 1rem; background: transparent; flex-shrink: 0; }
+    .input-wrap { display: flex; align-items: flex-end; gap: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 16px; padding: 0.5rem; transition: background 0.2s, box-shadow 0.2s; }
+    .input-wrap:focus-within { background: rgba(255,255,255,0.15); box-shadow: 0 0 0 2px rgba(255,255,255,0.2); }
+    .input-field { flex: 1; background: transparent; border: none; color: white; font-family: inherit; font-size: 1rem; padding: 0.75rem 1rem; resize: none; outline: none; -webkit-appearance: none; appearance: none; min-height: 60px; max-height: 300px; overflow-y: auto; line-height: 1.4; }
+    .input-field::placeholder { color: rgba(255,255,255,0.5); }
+    .send-btn { background: white; border: none; color: #334155; width: 48px; height: 48px; border-radius: 12px; font-size: 1.25rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s, box-shadow 0.2s; }
+    .send-btn:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .send-btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+    .footer { text-align: center; padding: 0.75rem; color: rgba(255,255,255,0.5); font-size: 0.75rem; flex-shrink: 0; }
+    .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+    .footer a:hover { color: rgba(255,255,255,0.9); }
+
+    @media (max-width: 768px) {
+      .ex-grid { grid-template-columns: 1fr; }
+      .bubble { max-width: 90%; }
+    }
+
+    /* ===== EMERGENCY SLIDE-OUT TAB ===== */
+    .emergency-tab { position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 9000; display: flex; align-items: flex-start; }
+    .emergency-tab-trigger { background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; writing-mode: vertical-rl; text-orientation: mixed; padding: 18px 10px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; border-radius: 10px 0 0 10px; border: none; display: flex; align-items: center; gap: 8px; transition: background 0.2s; box-shadow: -3px 0 16px rgba(220,38,38,0.45); white-space: nowrap; user-select: none; }
+    .emergency-tab-trigger:hover { background: linear-gradient(135deg, #ef4444, #dc2626); }
+    .emergency-tab-trigger i { font-size: 0.9rem; }
+    .emergency-panel { width: 0; overflow: hidden; background: white; transition: width 0.35s cubic-bezier(0.4,0,0.2,1); box-shadow: -4px 0 24px rgba(0,0,0,0.2); display: flex; flex-direction: column; }
+    .emergency-tab.open .emergency-panel { width: 300px; }
+    .emergency-panel-inner { width: 300px; padding: 0; display: flex; flex-direction: column; height: 100%; overflow-y: auto; max-height: 85vh; }
+    .ep-header { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .ep-header h3 { margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .ep-close { background: rgba(255,255,255,0.2); border: none; color: white; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: background 0.2s; }
+    .ep-close:hover { background: rgba(255,255,255,0.35); }
+    .ep-section { padding: 0.875rem 1.25rem; border-bottom: 1px solid #f3f4f6; }
+    .ep-section:last-child { border-bottom: none; }
+    .ep-section-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #6b7280; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem; }
+    .ep-section-title i { color: #d97706; font-size: 0.75rem; }
+    .ep-section-title i.red { color: #dc2626; }
+    .ep-contact { display: flex; flex-direction: column; margin-bottom: 0.6rem; }
+    .ep-contact:last-child { margin-bottom: 0; }
+    .ep-contact-name { font-size: 0.82rem; font-weight: 600; color: #1e293b; }
+    .ep-contact-role { font-size: 0.75rem; color: #6b7280; margin-bottom: 0.2rem; }
+    .ep-contact-links { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .ep-link { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.78rem; padding: 0.2rem 0.5rem; border-radius: 5px; text-decoration: none; font-weight: 500; transition: opacity 0.2s; }
+    .ep-link:hover { opacity: 0.8; }
+    .ep-link.phone { background: #eff6ff; color: #1d4ed8; }
+    .ep-emergency-line { background: linear-gradient(135deg, #fef2f2, #fee2e2); border: 1px solid #fecaca; border-radius: 8px; padding: 0.6rem 0.875rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+    .ep-emergency-line:last-child { margin-bottom: 0; }
+    .ep-emergency-label { font-size: 0.82rem; font-weight: 600; color: #7f1d1d; }
+    .ep-emergency-number { font-size: 1rem; font-weight: 700; color: #dc2626; text-decoration: none; }
+    .ep-emergency-number:hover { color: #b91c1c; }
+
+    .voice-btn { width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+    .mic-btn { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; }
+    .mic-btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(99,102,241,0.4); }
+    .mic-btn.recording { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); animation: pulse-recording 1s infinite; }
+    @keyframes pulse-recording { 0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); } 50% { box-shadow: 0 0 0 12px rgba(239,68,68,0); } }
+    .speaker-btn { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+    .speaker-btn:hover { background: rgba(255,255,255,0.25); }
+    .speaker-btn.active { background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-color: transparent; }
+    .voice-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .voice-btn i { font-size: 1.1rem; }
+    .input-controls { display: flex; align-items: center; gap: 0.5rem; }
+    .voice-status { font-size: 0.75rem; color: rgba(255,255,255,0.7); text-align: center; padding: 0.25rem 0; min-height: 1.25rem; }
+    .voice-status.recording { color: #fca5a5; }
+    .bubble-bot.speaking { box-shadow: 0 0 0 3px rgba(16,185,129,0.5); }
+
+    /* Header Actions */
+    .header-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .skip-link { position: absolute; top: -100px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 0.75rem 1.5rem; border-radius: 0 0 10px 10px; text-decoration: none; font-weight: 600; z-index: 9999; transition: top 0.3s; }
+    .skip-link:focus { top: 0; }
+    .icon-btn { width: 40px; height: 40px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .icon-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
+    .icon-btn i { font-size: 1.1rem; }
+
+    /* Accessibility Panel */
+    .a11y-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+    .a11y-overlay.open { opacity: 1; visibility: visible; }
+    .a11y-panel { background: white; border-radius: 20px; width: 90%; max-width: 420px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); transform: translateY(20px) scale(0.95); transition: transform 0.3s; }
+    .a11y-overlay.open .a11y-panel { transform: translateY(0) scale(1); }
+    .a11y-header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid #e5e7eb; background: linear-gradient(135deg, #1e293b 0%, #2c5282 100%); border-radius: 20px 20px 0 0; color: white; }
+    .a11y-header h3 { margin: 0; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .a11y-close { width: 36px; height: 36px; border: none; background: rgba(255,255,255,0.15); color: white; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .a11y-close:hover { background: rgba(255,255,255,0.25); }
+    .a11y-section { padding: 1.25rem 1.5rem; border-bottom: 1px solid #f3f4f6; }
+    .a11y-section:last-of-type { border-bottom: none; }
+    .a11y-section h4 { margin: 0 0 1rem 0; font-size: 0.85rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 0.5rem; }
+    .a11y-section h4 i { color: #1e293b; }
+    .font-size-controls { display: flex; align-items: center; justify-content: center; gap: 1rem; background: #f9fafb; padding: 0.75rem; border-radius: 12px; }
+    .font-btn { width: 48px; height: 48px; border: 2px solid #e5e7eb; background: white; border-radius: 12px; font-size: 1.1rem; font-weight: 600; color: #1e293b; cursor: pointer; transition: all 0.2s; }
+    .font-btn:hover { border-color: #1e293b; background: #eff6ff; }
+    .font-btn:active { transform: scale(0.95); }
+    .font-size-label { font-size: 1.1rem; font-weight: 600; color: #1e293b; min-width: 60px; text-align: center; }
+    .a11y-toggles { display: flex; flex-direction: column; gap: 0.75rem; }
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: #f9fafb; border-radius: 12px; cursor: pointer; transition: background 0.2s; }
+    .toggle-row:hover { background: #f3f4f6; }
+    .toggle-row span { font-size: 0.95rem; color: #374151; }
+    .toggle-switch { position: relative; width: 52px; height: 28px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: #d1d5db; border-radius: 28px; transition: background 0.3s; }
+    .toggle-slider::before { content: ''; position: absolute; width: 22px; height: 22px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: transform 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .toggle-switch input:checked + .toggle-slider { background: #10b981; }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(24px); }
+    .toggle-switch input:focus + .toggle-slider { box-shadow: 0 0 0 3px rgba(16,185,129,0.3); }
+    .shortcuts-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .shortcut { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0; font-size: 0.9rem; color: #6b7280; }
+    .shortcut kbd { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 28px; padding: 0 0.5rem; background: linear-gradient(180deg, #f9fafb 0%, #e5e7eb 100%); border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 0.8rem; font-weight: 600; color: #374151; box-shadow: 0 2px 0 #d1d5db; }
+    .a11y-footer { padding: 1rem 1.5rem; background: #f9fafb; border-radius: 0 0 20px 20px; }
+    .a11y-reset { width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; background: white; border-radius: 10px; font-size: 0.9rem; color: #6b7280; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; }
+    .a11y-reset:hover { border-color: #1e293b; color: #1e293b; }
+
+    /* Message actions */
+    .msg-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #f3f4f6; }
+    .msg-action-btn { padding: 0.4rem 0.75rem; border: 1px solid #e5e7eb; background: #f9fafb; border-radius: 8px; font-size: 0.8rem; color: #6b7280; cursor: pointer; display: flex; align-items: center; gap: 0.4rem; transition: all 0.2s; }
+    .msg-action-btn:hover { border-color: #1e293b; color: #1e293b; background: #eff6ff; }
+    .msg-action-btn i { font-size: 0.75rem; }
+
+    /* High Contrast */
+    .high-contrast .bubble-bot { background: #000 !important; color: #fff !important; border: 2px solid #fff !important; }
+    .high-contrast .bubble-bot strong { color: #ffd700 !important; }
+    .high-contrast .bubble-user { background: #fff !important; color: #000 !important; border: 2px solid #000 !important; }
+    .high-contrast .priority-banner { border: 2px solid #fff; }
+    .high-contrast .chat-container { background: #1a1a1a; }
+    .high-contrast .messages { background: #000; }
+    .high-contrast .welcome { color: #fff; }
+    .high-contrast .ex-btn { background: #000; border: 2px solid #fff; color: #fff; }
+    .high-contrast .input-area { background: #000; }
+    .high-contrast .input-field { background: #000; color: #fff; border: 2px solid #fff; }
+
+    /* Dyslexia font */
+    .dyslexia-font, .dyslexia-font * { font-family: 'OpenDyslexic', sans-serif !important; letter-spacing: 0.05em; word-spacing: 0.1em; line-height: 1.8 !important; }
+
+    /* Reduced Motion */
+    .reduce-motion, .reduce-motion * { animation: none !important; transition: none !important; }
+
+    /* Print */
+    @media print {
+      .header, .input-area, .footer, .a11y-overlay, .msg-actions, .welcome, .sandbox-banner, .emergency-tab { display: none !important; }
+      .chat-container { height: auto !important; }
+      .messages { height: auto !important; overflow: visible !important; }
+      .bubble-bot { break-inside: avoid; box-shadow: none !important; border: 1px solid #ccc !important; page-break-inside: avoid; }
+      .priority-banner { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Quick Hide Screen (Esc to activate, click to return) -->
+<div class="hide-screen" id="hideScreen">
+  <div class="hide-screen-content">
+    <i class="fa-solid fa-clock"></i>
+    <p>Session paused</p>
+  </div>
+  <span class="hide-screen-hint">Click anywhere to continue</span>
+</div>
+
+<!-- Emergency Slide-Out Tab -->
+<div class="emergency-tab" id="emergencyTab">
+  <button class="emergency-tab-trigger" id="emergencyTabTrigger" aria-label="Emergency contacts">
+    <i class="fa-solid fa-triangle-exclamation"></i>
+    Emergency
+  </button>
+  <div class="emergency-panel" id="emergencyPanel">
+    <div class="emergency-panel-inner">
+      <div class="ep-header">
+        <h3><i class="fa-solid fa-triangle-exclamation"></i> Emergency Contacts</h3>
+        <button class="ep-close" id="emergencyClose" aria-label="Close emergency panel"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="ep-section">
+        <div class="ep-section-title"><i class="red fa-solid fa-circle-exclamation"></i> Immediate Emergency</div>
+        <div class="ep-emergency-line"><span class="ep-emergency-label">Police / Ambulance / Fire</span><a class="ep-emergency-number" href="tel:999">999</a></div>
+        <div class="ep-emergency-line"><span class="ep-emergency-label">Police Non-Emergency</span><a class="ep-emergency-number" href="tel:101">101</a></div>
+      </div>
+      <div class="ep-section">
+        <div class="ep-section-title"><i class="fa-solid fa-phone-volume"></i> National Helplines</div>
+        <div class="ep-contact">
+          <span class="ep-contact-name">NSPCC Helpline</span>
+          <span class="ep-contact-role">24/7 child protection support</span>
+          <div class="ep-contact-links"><a class="ep-link phone" href="tel:08088005000"><i class="fa-solid fa-phone"></i> 0808 800 5000</a></div>
+        </div>
+        <div class="ep-contact">
+          <span class="ep-contact-name">Childline</span>
+          <span class="ep-contact-role">Support for children and young people</span>
+          <div class="ep-contact-links"><a class="ep-link phone" href="tel:08001111"><i class="fa-solid fa-phone"></i> 0800 1111</a></div>
+        </div>
+        <div class="ep-contact">
+          <span class="ep-contact-name">Prevent Referral Helpline</span>
+          <span class="ep-contact-role">Concerns about radicalisation</span>
+          <div class="ep-contact-links"><a class="ep-link phone" href="tel:08000113764"><i class="fa-solid fa-phone"></i> 0800 011 3764</a></div>
+        </div>
+        <div class="ep-contact">
+          <span class="ep-contact-name">NSPCC CPSU</span>
+          <span class="ep-contact-role">Child protection in sport</span>
+          <div class="ep-contact-links"><a class="ep-link phone" href="tel:08088005000"><i class="fa-solid fa-phone"></i> 0808 800 5000</a></div>
+        </div>
+      </div>
+      <div class="ep-section">
+        <div class="ep-section-title"><i class="fa-solid fa-circle-info"></i> RESPOND Safeguarding</div>
+        <div class="ep-contact">
+          <span class="ep-contact-name">respondsafeguarding.org</span>
+          <span class="ep-contact-role">Framework information and full platform access</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Login Screen -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-dots">
+      <div class="respond-dots">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-e"></div>
+        <div class="dot dot-s"></div>
+        <div class="dot dot-p"></div>
+        <div class="dot dot-o"></div>
+        <div class="dot dot-n"></div>
+        <div class="dot dot-d"></div>
+      </div>
+    </div>
+    <h1 class="login-title">Ask RESPOND Pro</h1>
+    <p class="login-subtitle">Advanced DSL Consultation Tool</p>
+    <div class="login-sandbox-badge"><i class="fa-solid fa-flask"></i> Sandbox Demo</div>
+    <label class="login-label" for="codeInput">Access Code</label>
+    <input type="text" id="codeInput" class="login-input" placeholder="Enter your code" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="20">
+    <p class="login-error" id="loginError"></p>
+    <div class="login-disclaimer">
+      <p><i class="fa-solid fa-triangle-exclamation"></i> <strong>Sandbox — not for live cases.</strong> Do not enter real names, school details, or identifiable information.</p>
+      <p><i class="fa-solid fa-circle-info"></i> This is a demonstration version of Ask RESPOND Pro. Responses are AI-generated and support professional judgement — they do not replace it.</p>
+      <label class="checkbox-label">
+        <input type="checkbox" id="disclaimerCheck">
+        I understand this is a demo environment and will not enter real case information
+      </label>
+    </div>
+    <button class="login-btn" id="loginBtn" disabled>Access Sandbox</button>
+    <div class="login-footer">
+      <a href="https://respondsafeguarding.org" target="_blank">respondsafeguarding.org</a>
+      &nbsp;|&nbsp; © 2026 RESPOND Safeguarding
+    </div>
+  </div>
+</div>
+
+<!-- Skip Link -->
+<a href="#messages" class="skip-link">Skip to conversation</a>
+
+<!-- Chat Container -->
+<div class="chat-container" id="chatContainer">
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.13 6.77-5 7.94-2.87-1.17-5-4.44-5-7.94V7.18L12 5z"/></svg>
+      </div>
+      <div class="respond-dots" style="gap:5px;">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-e"></div>
+        <div class="dot dot-s"></div>
+        <div class="dot dot-p"></div>
+        <div class="dot dot-o"></div>
+        <div class="dot dot-n"></div>
+        <div class="dot dot-d"></div>
+      </div>
+      <span class="logo-text">Ask <span style="font-weight:400;opacity:0.8">RESPOND</span> Pro</span>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="accessibilityBtn" title="Accessibility Settings (Press A)" aria-label="Open accessibility settings">
+        <i class="fa-solid fa-universal-access"></i>
+      </button>
+      <button class="clear-btn" id="clearBtn">New Chat</button>
+    </div>
+  </header>
+
+  <!-- Sandbox Banner -->
+  <div class="sandbox-banner">
+    <i class="fa-solid fa-flask" style="margin-right:0.4rem;"></i>
+    SANDBOX DEMO — This is an anonymised preview of Ask RESPOND Pro. Not for use with real cases.
+    Learn more at <a href="https://respondsafeguarding.org" target="_blank">respondsafeguarding.org</a>
+  </div>
+
+  <!-- Accessibility Panel -->
+  <div class="a11y-overlay" id="a11yOverlay" role="dialog" aria-label="Accessibility Settings" aria-modal="true">
+    <div class="a11y-panel">
+      <div class="a11y-header">
+        <h3><i class="fa-solid fa-universal-access"></i> Accessibility</h3>
+        <button class="a11y-close" id="a11yClose" aria-label="Close accessibility panel"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="a11y-section">
+        <h4><i class="fa-solid fa-text-height"></i> Text Size</h4>
+        <div class="font-size-controls">
+          <button class="font-btn" id="fontDecrease" aria-label="Decrease text size">A−</button>
+          <span class="font-size-label" id="fontSizeLabel">100%</span>
+          <button class="font-btn" id="fontIncrease" aria-label="Increase text size">A+</button>
+        </div>
+      </div>
+      <div class="a11y-section">
+        <h4><i class="fa-solid fa-palette"></i> Display</h4>
+        <div class="a11y-toggles">
+          <label class="toggle-row">
+            <span>High Contrast</span>
+            <div class="toggle-switch"><input type="checkbox" id="highContrastToggle"><span class="toggle-slider"></span></div>
+          </label>
+          <label class="toggle-row">
+            <span>Dyslexia-Friendly Font</span>
+            <div class="toggle-switch"><input type="checkbox" id="dyslexiaToggle"><span class="toggle-slider"></span></div>
+          </label>
+          <label class="toggle-row">
+            <span>Reduce Motion</span>
+            <div class="toggle-switch"><input type="checkbox" id="reduceMotionToggle"><span class="toggle-slider"></span></div>
+          </label>
+        </div>
+      </div>
+      <div class="a11y-section">
+        <h4><i class="fa-solid fa-keyboard"></i> Keyboard Shortcuts</h4>
+        <div class="shortcuts-list">
+          <div class="shortcut"><kbd>A</kbd> <span>Accessibility panel</span></div>
+          <div class="shortcut"><kbd>M</kbd> <span>Start/stop microphone</span></div>
+          <div class="shortcut"><kbd>S</kbd> <span>Toggle voice responses</span></div>
+          <div class="shortcut"><kbd>N</kbd> <span>New chat</span></div>
+          <div class="shortcut"><kbd>/</kbd> <span>Focus input</span></div>
+          <div class="shortcut"><kbd>Esc</kbd> <span>Quick hide screen</span></div>
+        </div>
+      </div>
+      <div class="a11y-footer">
+        <button class="a11y-reset" id="a11yReset"><i class="fa-solid fa-rotate-left"></i> Reset to Defaults</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-area" role="main" aria-label="Chat area">
+    <div class="messages" id="messages" role="log" aria-live="polite" aria-label="Conversation history">
+      <div class="welcome" id="welcome">
+        <div class="welcome-dots">
+          <div class="respond-dots">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-e"></div>
+            <div class="dot dot-s"></div>
+            <div class="dot dot-p"></div>
+            <div class="dot dot-o"></div>
+            <div class="dot dot-n"></div>
+            <div class="dot dot-d"></div>
+          </div>
+        </div>
+        <h2>Ask RESPOND Pro</h2>
+        <p>Professional consultation for DSLs and senior safeguarding leads. Think through complex cases, threshold decisions, and multi-agency coordination.</p>
+        <div class="note" style="background: rgba(15,118,110,0.3); color: white; border: 1px solid rgba(15,118,110,0.6);">
+          <strong><i class="fa-solid fa-flask"></i> Sandbox Demo</strong><br>
+          This is an anonymised preview. Do not enter real names, school details, or case information.
+        </div>
+        <p class="ex-label">Try asking:</p>
+        <div class="ex-grid" id="exampleGrid">
+          <button class="ex-btn">Help me think through whether this meets threshold for referral</button>
+          <button class="ex-btn">I'm unsure if this is LADO or internal — can we work through it?</button>
+          <button class="ex-btn">How do I frame this referral effectively for MASH?</button>
+          <button class="ex-btn">Multiple low-level concerns accumulating — when does it tip?</button>
+          <button class="ex-btn">Information sharing dilemma — family refusing consent</button>
+          <button class="ex-btn">Child-on-child case — how do I balance both children's needs?</button>
+          <button class="ex-btn">Strategy meeting prep — what should I be ready for?</button>
+          <button class="ex-btn">I'm not sure if something is serious enough to report. What should I do?</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <div class="voice-status" id="voiceStatus"></div>
+      <div class="input-wrap">
+        <button class="voice-btn mic-btn" id="micBtn" title="Speak your question">
+          <i class="fa-solid fa-microphone"></i>
+        </button>
+        <textarea class="input-field" id="questionInput" placeholder="Describe your scenario or question..." rows="3" aria-label="Describe your safeguarding scenario or question"></textarea>
+        <div class="input-controls">
+          <button class="voice-btn speaker-btn" id="speakerBtn" title="Toggle voice responses">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+          <button class="send-btn" id="sendBtn" disabled aria-label="Send question">
+            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    © 2026 RESPOND Safeguarding &nbsp;|&nbsp;
+    <a href="https://respondsafeguarding.org" target="_blank">respondsafeguarding.org</a>
+    &nbsp;|&nbsp; Sandbox demo — not for use with real cases
+  </footer>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // ===== AUTH =====
+  const loginScreen   = document.getElementById('loginScreen');
+  const chatContainer = document.getElementById('chatContainer');
+  const codeInput     = document.getElementById('codeInput');
+  const loginError    = document.getElementById('loginError');
+  const loginBtn      = document.getElementById('loginBtn');
+  const disclaimerCheck = document.getElementById('disclaimerCheck');
+
+  // Session timeout: 4 hours
+  const SESSION_TIMEOUT_MS = 4 * 60 * 60 * 1000;
+
+  function showChat() {
+    loginScreen.style.display = 'none';
+    chatContainer.classList.add('show');
+    if (window._respondInitChat) window._respondInitChat();
+  }
+
+  // Check existing session
+  try {
+    const auth = sessionStorage.getItem('respond-sandbox-auth');
+    const ts   = parseInt(sessionStorage.getItem('respond-sandbox-ts') || '0', 10);
+    if (auth === 'true' && Date.now() - ts < SESSION_TIMEOUT_MS) {
+      showChat();
+    }
+  } catch(e) {}
+
+  // Disclaimer gate
+  disclaimerCheck.addEventListener('change', () => {
+    loginBtn.disabled = !disclaimerCheck.checked;
+  });
+
+  // Auto-uppercase as user types
+  codeInput.addEventListener('input', () => {
+    const pos = codeInput.selectionStart;
+    codeInput.value = codeInput.value.toUpperCase();
+    codeInput.setSelectionRange(pos, pos);
+    codeInput.classList.remove('error');
+    loginError.textContent = '';
+  });
+
+  codeInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !loginBtn.disabled) checkCode();
+  });
+
+  loginBtn.addEventListener('click', checkCode);
+
+  async function checkCode() {
+    const code = codeInput.value.trim();
+    if (!code) return;
+
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Checking…';
+    loginError.textContent = '';
+    codeInput.classList.remove('error');
+
+    try {
+      const res  = await fetch('/.netlify/functions/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        try {
+          sessionStorage.setItem('respond-sandbox-auth', 'true');
+          sessionStorage.setItem('respond-sandbox-ts', Date.now().toString());
+        } catch(e) {}
+        showChat();
+      } else {
+        codeInput.classList.add('error');
+        loginError.textContent = 'Invalid access code. Please check and try again.';
+        codeInput.value = '';
+        codeInput.focus();
+      }
+    } catch (err) {
+      loginError.textContent = 'Connection error. Please try again.';
+    } finally {
+      loginBtn.disabled = !disclaimerCheck.checked;
+      loginBtn.textContent = 'Access Sandbox';
+    }
+  }
+
+  // ===== CHAT SETUP (runs after successful auth) =====
+  function initChat() {
+    const messages     = document.getElementById('messages');
+  const welcome      = document.getElementById('welcome');
+  const questionInput= document.getElementById('questionInput');
+  const sendBtn      = document.getElementById('sendBtn');
+  const clearBtn     = document.getElementById('clearBtn');
+  const exampleGrid  = document.getElementById('exampleGrid');
+
+  let history  = [];
+  let isLoading= false;
+
+  // --- Input handlers ---
+  questionInput.addEventListener('input', () => {
+    sendBtn.disabled = !questionInput.value.trim() || isLoading;
+    questionInput.style.height = 'auto';
+    questionInput.style.height = Math.min(questionInput.scrollHeight, 300) + 'px';
+  });
+
+  questionInput.addEventListener('paste', (e) => {
+    e.preventDefault();
+    let pastedText = '';
+    if (e.clipboardData.types.includes('text/html')) {
+      const html = e.clipboardData.getData('text/html');
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      tempDiv.querySelectorAll('p, div, br, li, tr').forEach(el => {
+        if (el.tagName === 'BR') { el.replaceWith('\n'); } else { el.insertAdjacentText('afterend', '\n'); }
+      });
+      pastedText = (tempDiv.textContent || tempDiv.innerText).replace(/\n{3,}/g, '\n\n').trim();
+    } else {
+      pastedText = e.clipboardData.getData('text/plain');
+    }
+    const start = questionInput.selectionStart;
+    const end   = questionInput.selectionEnd;
+    questionInput.value = questionInput.value.substring(0, start) + pastedText + questionInput.value.substring(end);
+    questionInput.selectionStart = questionInput.selectionEnd = start + pastedText.length;
+    questionInput.dispatchEvent(new Event('input'));
+  });
+
+  questionInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!sendBtn.disabled) sendMessage(); }
+  });
+
+  sendBtn.addEventListener('click', sendMessage);
+  clearBtn.addEventListener('click', clearChat);
+
+  exampleGrid.querySelectorAll('.ex-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      questionInput.value = btn.textContent;
+      sendBtn.disabled = false;
+      sendMessage();
+    });
+  });
+
+  function clearChat() {
+    if (!confirm('Start a new chat? This will clear the current conversation.')) return;
+    history = [];
+    messages.innerHTML = '';
+    messages.appendChild(welcome);
+    welcome.style.display = 'block';
+    clearBtn.classList.remove('show');
+  }
+
+  async function sendMessage() {
+    const question = questionInput.value.trim();
+    if (!question || isLoading) return;
+
+    isLoading = true;
+    sendBtn.disabled = true;
+    questionInput.value = '';
+    questionInput.style.height = 'auto';
+    welcome.style.display = 'none';
+    clearBtn.classList.add('show');
+
+    addMessage('user', question);
+    history.push({ role: 'user', content: question });
+
+    const streamingEl = addStreamingMessage();
+
+    try {
+      const response = await fetch('/.netlify/functions/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: history,
+          clientDateTime: new Date().toLocaleString('en-GB', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+            hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+          })
+        })
+      });
+
+      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+
+      const contentType = response.headers.get('content-type');
+
+      if (contentType && contentType.includes('text/event-stream')) {
+        const reader  = response.body.getReader();
+        const decoder = new TextDecoder();
+        let fullContent = '';
+        let buffer = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const parsed = JSON.parse(line.slice(6));
+                if (parsed.text) { fullContent += parsed.text; updateStreamingMessage(streamingEl, fullContent); }
+                if (parsed.done) { finalizeStreamingMessage(streamingEl, fullContent); history.push({ role: 'assistant', content: fullContent }); }
+              } catch (e) { /* skip invalid JSON */ }
+            }
+          }
+        }
+        if (fullContent && !streamingEl.dataset.finalized) {
+          finalizeStreamingMessage(streamingEl, fullContent);
+          history.push({ role: 'assistant', content: fullContent });
+        }
+      } else {
+        const data = await response.json();
+        streamingEl.remove();
+        if (data.error) {
+          const failedQuestion = history.pop();
+          addMessageWithRetry('Sorry, something went wrong.', failedQuestion.content);
+        } else {
+          addMessage('bot', data.content);
+          history.push({ role: 'assistant', content: data.content });
+        }
+      }
+    } catch (err) {
+      streamingEl.remove();
+      const failedQuestion = history.pop();
+      if (err.message.includes('504') || err.message.includes('Server error')) {
+        addMessageWithRetry('The request took too long. Please try again.', failedQuestion.content);
+      } else {
+        addMessageWithRetry('Connection error. Please check your internet.', failedQuestion.content);
+      }
+    }
+
+    isLoading = false;
+    sendBtn.disabled = !questionInput.value.trim();
+  }
+
+  function addStreamingMessage() {
+    const div = document.createElement('div');
+    div.className = 'msg-bot';
+    div.innerHTML = `
+      <div class="avatar"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+      <div class="bubble bubble-bot streaming-bubble">
+        <div class="streaming-content"><span class="loading-dots"><span>.</span><span>.</span><span>.</span></span></div>
+        <span class="streaming-cursor" style="display:none;">&#9610;</span>
+      </div>`;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  }
+
+  function updateStreamingMessage(el, content) {
+    const contentEl = el.querySelector('.streaming-content');
+    const cursor    = el.querySelector('.streaming-cursor');
+    if (contentEl) {
+      contentEl.innerHTML = typeof marked !== 'undefined' ? marked.parse(content) : formatMarkdownBasic(content);
+      if (cursor) cursor.style.display = 'inline-block';
+      messages.scrollTop = messages.scrollHeight;
+    }
+  }
+
+  function finalizeStreamingMessage(el, content) {
+    el.dataset.finalized = 'true';
+    const bubble = el.querySelector('.bubble-bot');
+    if (bubble) {
+      const cursor = bubble.querySelector('.streaming-cursor');
+      if (cursor) cursor.remove();
+
+      let priorityClass = '';
+      if      (content.includes('[PRIORITY:RED]'))   priorityClass = 'bubble-priority-red';
+      else if (content.includes('[PRIORITY:AMBER]')) priorityClass = 'bubble-priority-amber';
+      else if (content.includes('[PRIORITY:GREEN]')) priorityClass = 'bubble-priority-green';
+      else if (content.includes('[PRIORITY:BLUE]'))  priorityClass = 'bubble-priority-blue';
+      else if (content.includes('[PRIORITY:GREY]'))  priorityClass = 'bubble-priority-grey';
+
+      if (priorityClass) { bubble.classList.remove('streaming-bubble'); bubble.classList.add(priorityClass); }
+
+      const contentEl = bubble.querySelector('.streaming-content');
+      if (contentEl) {
+        const formatted = formatMarkdown(content);
+        contentEl.outerHTML = formatted.html;
+      }
+
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'msg-actions';
+      actionsDiv.innerHTML = `
+        <button class="msg-action-btn print-btn" title="Print conversation"><i class="fa-solid fa-print"></i> Print</button>
+        <button class="msg-action-btn copy-btn" title="Copy conversation"><i class="fa-solid fa-copy"></i> Copy</button>
+        <button class="msg-action-btn speak-btn" title="Read aloud"><i class="fa-solid fa-volume-high"></i> Read</button>`;
+      bubble.appendChild(actionsDiv);
+
+      actionsDiv.querySelector('.print-btn').addEventListener('click', () => printResponse(bubble));
+      actionsDiv.querySelector('.copy-btn').addEventListener('click', (e) => copyResponse(content, e.currentTarget));
+      actionsDiv.querySelector('.speak-btn').addEventListener('click', () => { if (window.speakBotResponse) window.speakBotResponse(content, bubble); });
+
+      if (window.speakBotResponse) setTimeout(() => window.speakBotResponse(content, bubble), 300);
+    }
+  }
+
+  function addMessageWithRetry(errorMsg, originalQuestion) {
+    const div = document.createElement('div');
+    div.className = 'msg-bot';
+    div.innerHTML = `
+      <div class="avatar"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+      <div class="bubble bubble-bot bubble-error">
+        <p>${errorMsg}</p>
+        <button class="retry-btn" onclick="retryQuestion('${escapeHtml(originalQuestion).replace(/'/g, "\\'")}')">
+          <i class="fa-solid fa-rotate-right"></i> Try Again
+        </button>
+      </div>`;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  window.retryQuestion = function(question) {
+    questionInput.value = question;
+    questionInput.style.height = 'auto';
+    questionInput.style.height = Math.min(questionInput.scrollHeight, 300) + 'px';
+    sendMessage();
+  };
+
+  function addMessage(role, content, loading = false, error = false) {
+    const div = document.createElement('div');
+    let bubbleElement = null;
+
+    if (role === 'user') {
+      div.className = 'msg-user';
+      div.innerHTML = `<div class="bubble bubble-user">${escapeHtml(content)}</div>`;
+    } else {
+      div.className = 'msg-bot';
+      if (loading) {
+        div.innerHTML = `
+          <div class="avatar"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.13 6.77-5 7.94-2.87-1.17-5-4.44-5-7.94V7.18L12 5z"/></svg></div>
+          <div class="bubble bubble-bot"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+      } else {
+        const formatted = formatMarkdown(content);
+        const pc = formatted.priorityClass || '';
+        div.innerHTML = `
+          <div class="avatar"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.13 6.77-5 7.94-2.87-1.17-5-4.44-5-7.94V7.18L12 5z"/></svg></div>
+          <div class="bubble bubble-bot ${error ? 'bubble-error' : ''} ${pc}">
+            ${formatted.html}
+            <div class="msg-actions">
+              <button class="msg-action-btn print-btn" title="Print conversation"><i class="fa-solid fa-print"></i> Print</button>
+              <button class="msg-action-btn copy-btn" title="Copy conversation"><i class="fa-solid fa-copy"></i> Copy</button>
+              <button class="msg-action-btn speak-btn" title="Read aloud"><i class="fa-solid fa-volume-high"></i> Read</button>
+            </div>
+          </div>`;
+        bubbleElement = div.querySelector('.bubble-bot');
+        div.querySelector('.print-btn').addEventListener('click', () => printResponse(bubbleElement));
+        div.querySelector('.copy-btn').addEventListener('click', (e) => copyResponse(content, e.currentTarget));
+        div.querySelector('.speak-btn').addEventListener('click', () => { if (window.speakBotResponse) window.speakBotResponse(content, bubbleElement); });
+      }
+    }
+
+    messages.appendChild(div);
+    setTimeout(() => {
+      if (role === 'user' || loading) { messages.scrollTop = messages.scrollHeight; }
+      else { div.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    }, 50);
+
+    if (role === 'bot' && !loading && !error && bubbleElement && window.speakBotResponse) {
+      setTimeout(() => window.speakBotResponse(content, bubbleElement), 300);
+    }
+    return div;
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function formatMarkdownBasic(text) {
+    if (!text) return '';
+    let html = escapeHtml(text);
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\n\n/g, '</p><p>');
+    html = html.replace(/\n/g, '<br>');
+    return '<p>' + html + '</p>';
+  }
+
+  function formatMarkdown(text) {
+    if (!text) return { html: '', priorityClass: '' };
+
+    let priorityBanner = '';
+    let priorityClass  = '';
+    const priorityMatch = text.match(/\[PRIORITY:(RED|AMBER|GREEN|BLUE|GREY)\]\s*/i);
+    if (priorityMatch) {
+      const level = priorityMatch[1].toUpperCase();
+      text = text.replace(/\[PRIORITY:(RED|AMBER|GREEN|BLUE|GREY)\]\s*/gi, '');
+      const cfg = {
+        RED:   { icon: 'fa-solid fa-circle-exclamation', label: 'IMMEDIATE ACTION NEEDED',        class: 'priority-red',   bubbleClass: 'bubble-priority-red' },
+        AMBER: { icon: 'fa-solid fa-triangle-exclamation', label: 'REVIEW TODAY',                class: 'priority-amber', bubbleClass: 'bubble-priority-amber' },
+        GREEN: { icon: 'fa-solid fa-circle-check', label: 'STANDARD SAFEGUARDING PROCESS',       class: 'priority-green', bubbleClass: 'bubble-priority-green' },
+        BLUE:  { icon: 'fa-solid fa-circle-info', label: 'INFORMATION',                          class: 'priority-blue',  bubbleClass: 'bubble-priority-blue' },
+        GREY:  { icon: 'fa-solid fa-comment', label: 'GENERAL GUIDANCE',                          class: 'priority-grey',  bubbleClass: 'bubble-priority-grey' }
+      };
+      const c = cfg[level];
+      priorityBanner = `<div class="priority-banner ${c.class}"><i class="${c.icon}"></i><span>${c.label}</span></div>`;
+      priorityClass  = c.bubbleClass;
+    }
+
+    let html = escapeHtml(text);
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
+    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+    html = html.replace(/^## (.+)$/gm, '<h4>$1</h4>');
+    html = html.replace(/^### (.+)$/gm, '<h4>$1</h4>');
+    html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+    html = html.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
+    html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+    html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+    html = html.replace(/\n\n/g, '</p><p>');
+    html = html.replace(/\n(?!<)/g, '<br>');
+    html = '<p>' + html + '</p>';
+    html = html.replace(/<p><\/p>/g, '');
+    html = html.replace(/<p>(<[uh])/g, '$1');
+    html = html.replace(/(<\/[uh]l>)<\/p>/g, '$1');
+
+    return { html: priorityBanner + html, priorityClass };
+  }
+
+  // ===== VOICE =====
+  const micBtn      = document.getElementById('micBtn');
+  const speakerBtn  = document.getElementById('speakerBtn');
+  const voiceStatus = document.getElementById('voiceStatus');
+
+  let recognition          = null;
+  let isRecording          = false;
+  let voiceResponsesEnabled= false;
+
+  const SpeechRecognition  = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const speechSynthesis    = window.speechSynthesis;
+  const isSecureContext    = window.isSecureContext || location.protocol === 'https:' || location.hostname === 'localhost';
+
+  if (SpeechRecognition && isSecureContext) {
+    recognition = new SpeechRecognition();
+    recognition.continuous      = false;
+    recognition.interimResults  = true;
+    recognition.lang            = 'en-GB';
+
+    recognition.onstart = () => { isRecording = true; micBtn.classList.add('recording'); micBtn.innerHTML = '<i class="fa-solid fa-stop"></i>'; voiceStatus.textContent = 'Listening... Speak now'; voiceStatus.classList.add('recording'); };
+    recognition.onresult = (event) => {
+      let interim = '', final = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const t = event.results[i][0].transcript;
+        if (event.results[i].isFinal) final += t; else interim += t;
+      }
+      if (final) { questionInput.value = final; sendBtn.disabled = false; voiceStatus.textContent = 'Got it! Press send or keep speaking'; }
+      else if (interim) { questionInput.value = interim; voiceStatus.textContent = 'Listening: ' + interim.substring(0, 50) + (interim.length > 50 ? '...' : ''); }
+    };
+    recognition.onerror = (event) => {
+      stopRecording();
+      const msgs = { 'not-allowed': 'Microphone blocked. Check browser permissions.', 'no-speech': 'No speech detected. Tap mic to try again.', 'network': 'Network error. Check connection.', 'aborted': '' };
+      voiceStatus.textContent = msgs[event.error] || 'Voice input unavailable.';
+      if (voiceStatus.textContent) setTimeout(() => { voiceStatus.textContent = ''; }, 4000);
+    };
+    recognition.onend = () => stopRecording();
+  } else {
+    micBtn.disabled = true;
+    micBtn.title = isSecureContext ? 'Voice input not supported in this browser' : 'Voice input requires HTTPS';
+  }
+
+  function stopRecording() {
+    isRecording = false;
+    micBtn.classList.remove('recording');
+    micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+    voiceStatus.classList.remove('recording');
+    voiceStatus.textContent = questionInput.value.trim() ? 'Ready to send' : '';
+    if (questionInput.value.trim()) setTimeout(() => { voiceStatus.textContent = ''; }, 2000);
+  }
+
+  micBtn.addEventListener('click', () => {
+    if (!recognition) { voiceStatus.textContent = 'Voice input not supported.'; setTimeout(() => { voiceStatus.textContent = ''; }, 3000); return; }
+    if (isRecording) { recognition.stop(); }
+    else {
+      if (speechSynthesis) speechSynthesis.cancel();
+      try { recognition.start(); } catch (e) { if (e.name === 'InvalidStateError') recognition.stop(); }
+    }
+  });
+
+  if (speechSynthesis) {
+    speakerBtn.addEventListener('click', () => {
+      voiceResponsesEnabled = !voiceResponsesEnabled;
+      speakerBtn.classList.toggle('active', voiceResponsesEnabled);
+      speakerBtn.innerHTML = voiceResponsesEnabled ? '<i class="fa-solid fa-volume-high"></i>' : '<i class="fa-solid fa-volume-xmark"></i>';
+      voiceStatus.textContent = voiceResponsesEnabled ? 'Voice responses ON' : 'Voice responses OFF';
+      if (!voiceResponsesEnabled) speechSynthesis.cancel();
+      setTimeout(() => { voiceStatus.textContent = ''; }, 2000);
+    });
+  } else {
+    speakerBtn.disabled = true;
+    speakerBtn.title = 'Text-to-speech not supported in this browser';
+  }
+
+  function speakText(text, bubbleElement) {
+    if (!speechSynthesis || !voiceResponsesEnabled) return;
+    speechSynthesis.cancel();
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = text;
+    let cleanText = (tempDiv.textContent || tempDiv.innerText)
+      .replace(/\[PRIORITY:(RED|AMBER|GREEN|BLUE|GREY)\]/gi, '')
+      .replace(/DSL/g, 'D S L').replace(/LADO/g, 'L A D O').replace(/KCSIE/g, 'keeping children safe in education').trim();
+    if (!cleanText) return;
+
+    const sentences = cleanText.match(/[^.!?]+[.!?]+/g) || [cleanText];
+    let chunks = [], current = '';
+    sentences.forEach(s => { if ((current + s).length < 200) current += s; else { if (current) chunks.push(current.trim()); current = s; } });
+    if (current) chunks.push(current.trim());
+
+    let idx = 0;
+    function next() {
+      if (idx >= chunks.length || !voiceResponsesEnabled) { if (bubbleElement) bubbleElement.classList.remove('speaking'); return; }
+      const utt  = new SpeechSynthesisUtterance(chunks[idx]);
+      utt.rate   = 0.95; utt.pitch = 1; utt.volume = 1; utt.lang = 'en-GB';
+      const voices = speechSynthesis.getVoices();
+      const voice  = voices.find(v => v.lang === 'en-GB') || voices.find(v => v.lang.startsWith('en')) || voices[0];
+      if (voice) utt.voice = voice;
+      utt.onend   = () => { idx++; next(); };
+      utt.onerror = () => { if (bubbleElement) bubbleElement.classList.remove('speaking'); };
+      speechSynthesis.speak(utt);
+    }
+    if (bubbleElement) bubbleElement.classList.add('speaking');
+    if (speechSynthesis.getVoices().length === 0) { speechSynthesis.addEventListener('voiceschanged', next, { once: true }); } else next();
+  }
+  window.speakBotResponse = speakText;
+
+  // ===== ACCESSIBILITY =====
+  const a11yOverlay       = document.getElementById('a11yOverlay');
+  const a11yClose         = document.getElementById('a11yClose');
+  const accessibilityBtn  = document.getElementById('accessibilityBtn');
+  const fontDecrease      = document.getElementById('fontDecrease');
+  const fontIncrease      = document.getElementById('fontIncrease');
+  const fontSizeLabel     = document.getElementById('fontSizeLabel');
+  const highContrastToggle= document.getElementById('highContrastToggle');
+  const dyslexiaToggle    = document.getElementById('dyslexiaToggle');
+  const reduceMotionToggle= document.getElementById('reduceMotionToggle');
+  const a11yReset         = document.getElementById('a11yReset');
+  let currentFontSize     = 100;
+
+  function loadA11yPreferences() {
+    try {
+      const saved = localStorage.getItem('respond-sandbox-a11y');
+      if (!saved) return;
+      const p = JSON.parse(saved);
+      if (p.fontSize) { currentFontSize = p.fontSize; applyFontSize(); }
+      if (p.highContrast) { highContrastToggle.checked = true; document.body.classList.add('high-contrast'); }
+      if (p.dyslexiaFont) { dyslexiaToggle.checked = true; loadDyslexiaFont(); document.body.classList.add('dyslexia-font'); }
+      if (p.reduceMotion) { reduceMotionToggle.checked = true; document.body.classList.add('reduce-motion'); }
+    } catch(e) {}
+  }
+
+  let dyslexiaFontLoaded = false;
+  function loadDyslexiaFont() {
+    if (dyslexiaFontLoaded) return;
+    const style = document.createElement('style');
+    style.textContent = `@font-face{font-family:'OpenDyslexic';src:url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/woff/OpenDyslexic-Regular.woff') format('woff');font-weight:normal;font-display:swap}@font-face{font-family:'OpenDyslexic';src:url('https://cdn.jsdelivr.net/npm/open-dyslexic@1.0.3/woff/OpenDyslexic-Bold.woff') format('woff');font-weight:bold;font-display:swap}`;
+    document.head.appendChild(style);
+    dyslexiaFontLoaded = true;
+  }
+
+  function saveA11yPreferences() {
+    try {
+      localStorage.setItem('respond-sandbox-a11y', JSON.stringify({ fontSize: currentFontSize, highContrast: highContrastToggle.checked, dyslexiaFont: dyslexiaToggle.checked, reduceMotion: reduceMotionToggle.checked }));
+    } catch(e) {}
+  }
+
+  function applyFontSize() { document.documentElement.style.fontSize = (currentFontSize / 100) * 16 + 'px'; fontSizeLabel.textContent = currentFontSize + '%'; }
+  function openA11yPanel()  { a11yOverlay.classList.add('open'); a11yClose.focus(); }
+  function closeA11yPanel() { a11yOverlay.classList.remove('open'); accessibilityBtn.focus(); }
+
+  accessibilityBtn.addEventListener('click', openA11yPanel);
+  a11yClose.addEventListener('click', closeA11yPanel);
+  a11yOverlay.addEventListener('click', (e) => { if (e.target === a11yOverlay) closeA11yPanel(); });
+  fontDecrease.addEventListener('click', () => { if (currentFontSize > 75) { currentFontSize -= 10; applyFontSize(); saveA11yPreferences(); } });
+  fontIncrease.addEventListener('click', () => { if (currentFontSize < 150) { currentFontSize += 10; applyFontSize(); saveA11yPreferences(); } });
+  highContrastToggle.addEventListener('change', () => { document.body.classList.toggle('high-contrast', highContrastToggle.checked); saveA11yPreferences(); });
+  dyslexiaToggle.addEventListener('change', () => { if (dyslexiaToggle.checked) loadDyslexiaFont(); document.body.classList.toggle('dyslexia-font', dyslexiaToggle.checked); saveA11yPreferences(); });
+  reduceMotionToggle.addEventListener('change', () => { document.body.classList.toggle('reduce-motion', reduceMotionToggle.checked); saveA11yPreferences(); });
+  a11yReset.addEventListener('click', () => {
+    currentFontSize = 100; applyFontSize();
+    highContrastToggle.checked = dyslexiaToggle.checked = reduceMotionToggle.checked = false;
+    document.body.classList.remove('high-contrast', 'dyslexia-font', 'reduce-motion');
+    try { localStorage.removeItem('respond-sandbox-a11y'); } catch(e) {}
+  });
+
+  // ===== PRINT =====
+  function printResponse(bubbleElement) {
+    const allMessages = document.querySelectorAll('.msg-user, .msg-bot');
+    let conversationHTML = '';
+    let qa = { q: null, a: null };
+
+    function flush() {
+      if (!qa.q && !qa.a) return;
+      conversationHTML += '<div class="qa-pair">';
+      if (qa.q) conversationHTML += `<div class="message user-message"><div class="message-label">Question:</div><div class="message-content">${qa.q}</div></div>`;
+      if (qa.a) conversationHTML += `<div class="message bot-message"><div class="message-label">RESPOND Guidance:</div><div class="message-content">${qa.a}</div></div>`;
+      conversationHTML += '</div>';
+      qa = { q: null, a: null };
+    }
+
+    allMessages.forEach(msg => {
+      if (msg.classList.contains('msg-user')) {
+        if (qa.q) flush();
+        const b = msg.querySelector('.bubble-user');
+        if (b && b.textContent.trim()) qa.q = escapeHtml(b.textContent);
+      } else {
+        const b = msg.querySelector('.bubble-bot');
+        if (b && !b.querySelector('.typing-dots')) {
+          const clone = b.cloneNode(true);
+          const act = clone.querySelector('.msg-actions');
+          if (act) act.remove();
+          qa.a = clone.innerHTML;
+          flush();
+        }
+      }
+    });
+    flush();
+
+    if (!conversationHTML.trim()) { alert('No conversation to print yet.'); return; }
+
+    const now = new Date();
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const ts = `${String(now.getDate()).padStart(2,'0')}-${months[now.getMonth()]}-${now.getFullYear()}_${String(now.getHours()).padStart(2,'0')}-${String(now.getMinutes()).padStart(2,'0')}`;
+
+    const pw = window.open('', '_blank');
+    if (!pw) { alert('Please allow popups to print.'); return; }
+    pw.document.write(`<!DOCTYPE html><html><head><title>Ask_RESPOND_${ts}</title>
+    <style>*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:1rem;max-width:800px;margin:0 auto;line-height:1.5;color:#1a1a1a;font-size:0.9rem}.header{border-bottom:3px solid #1e293b;padding-bottom:.75rem;margin-bottom:1rem}.respond-dots{display:flex;gap:5px;align-items:center}.respond-dots .dot{width:10px;height:10px;border-radius:50%}.dot-r{background:#0f172a!important}.dot-e{background:#235e4b!important}.dot-s{background:#a4684e!important}.dot-p{background:#cd372b!important}.dot-o{background:#ebaf24!important}.dot-n{background:#287bc9!important}.dot-d{background:#8625eb!important}.header-brand{display:flex;align-items:center;gap:.75rem}.header h1{color:#1e293b;margin:0;font-size:1.4rem;font-weight:600}.header-meta{color:#666;margin:.5rem 0 0;font-size:.8rem}.qa-pair{margin-bottom:1rem}.message-label{font-weight:600;color:#1e293b;margin-bottom:.2rem;font-size:.75rem;text-transform:uppercase;letter-spacing:.5px}.user-message .message-content{background:#f3f4f6;padding:.4rem .6rem;border-radius:6px;border-left:4px solid #6b7280}.bot-message .message-content{background:#f8fafc;padding:.4rem .6rem;border-radius:6px;border-left:4px solid #1e293b}.priority-banner{padding:.6rem .9rem;border-radius:6px;margin-bottom:.75rem;font-weight:600;font-size:.85rem;display:flex;align-items:center;gap:.5rem}.priority-banner i{display:none}.priority-red{background:#fee2e2!important;color:#991b1b;border-left:4px solid #dc2626}.priority-amber{background:#fef3c7!important;color:#92400e;border-left:4px solid #f59e0b}.priority-green{background:#dcfce7!important;color:#166534;border-left:4px solid #10b981}.priority-blue{background:#dbeafe!important;color:#1e40af;border-left:4px solid #3b82f6}.priority-grey{background:#f3f4f6!important;color:#4b5563;border-left:4px solid #6b7280}.footer{margin-top:2rem;padding-top:1rem;border-top:2px solid #1e293b;font-size:.7rem;color:#666}.footer-warning{background:#fef3c7!important;border-left:4px solid #f59e0b;padding:.6rem .9rem;margin-bottom:.75rem;border-radius:0 4px 4px 0}.sandbox-note{background:#e0f2fe!important;border:1px solid #7dd3fc;border-radius:4px;padding:.4rem .75rem;margin-top:.75rem;font-size:.7rem;color:#0369a1;text-align:center}.msg-actions{display:none}</style></head><body>
+    <div class="header"><div class="header-brand"><div class="respond-dots"><div class="dot dot-r"></div><div class="dot dot-e"></div><div class="dot dot-s"></div><div class="dot dot-p"></div><div class="dot dot-o"></div><div class="dot dot-n"></div><div class="dot dot-d"></div></div><h1>Ask RESPOND Pro</h1></div><p class="header-meta">${now.toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'})} at ${now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</p></div>
+    <div class="conversation">${conversationHTML}</div>
+    <div class="footer"><div class="footer-warning"><strong>Important:</strong> This guidance supports professional judgement but does not replace it. You remain accountable for threshold decisions and referrals.</div><p>Generated by Ask RESPOND Pro Sandbox &nbsp;|&nbsp; © 2026 RESPOND Safeguarding &nbsp;|&nbsp; respondsafeguarding.org</p><div class="sandbox-note">SANDBOX DEMO — generated from an anonymised preview environment</div></div>
+    </body></html>`);
+    pw.document.close();
+    pw.focus();
+    pw.print();
+  }
+
+  // ===== COPY =====
+  function copyResponse(content, button) {
+    const allMessages = document.querySelectorAll('.msg-user, .msg-bot');
+    let fullText = 'ASK RESPOND PRO — SAFEGUARDING GUIDANCE (SANDBOX)\nGenerated: ' + new Date().toLocaleString() + '\n' + '='.repeat(50) + '\n\n';
+    allMessages.forEach(msg => {
+      if (msg.classList.contains('msg-user')) {
+        const t = msg.querySelector('.bubble-user')?.textContent || '';
+        if (t.trim()) fullText += '[QUESTION]\n' + t + '\n\n';
+      } else {
+        const b = msg.querySelector('.bubble-bot');
+        if (b && !b.querySelector('.typing-dots')) {
+          const clone = b.cloneNode(true);
+          const act = clone.querySelector('.msg-actions');
+          if (act) act.remove();
+          fullText += '[RESPOND GUIDANCE]\n' + (clone.textContent || '').replace(/\s+/g, ' ').trim() + '\n\n' + '-'.repeat(50) + '\n\n';
+        }
+      }
+    });
+    fullText += '[Note] This guidance is for reference only. You remain accountable for decisions.\n[Note] Generated from RESPOND Safeguarding sandbox demo — not from a live case system.\n';
+
+    navigator.clipboard.writeText(fullText).then(() => {
+      const orig = button.innerHTML;
+      button.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+      button.style.color = '#10b981';
+      setTimeout(() => { button.innerHTML = orig; button.style.color = ''; }, 2000);
+    }).catch(() => {
+      button.innerHTML = '<i class="fa-solid fa-xmark"></i> Failed';
+      setTimeout(() => { button.innerHTML = '<i class="fa-solid fa-copy"></i> Copy'; }, 2000);
+    });
+  }
+
+  // ===== KEYBOARD SHORTCUTS =====
+  document.addEventListener('keydown', (e) => {
+    const activeEl = document.activeElement;
+    const isInput  = activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT';
+    if (isInput) {
+      if (e.key === 'Escape') { activeEl.blur(); if (speechSynthesis) speechSynthesis.cancel(); }
+      return;
+    }
+    switch(e.key.toLowerCase()) {
+      case 'a': if (!e.ctrlKey && !e.metaKey) { e.preventDefault(); a11yOverlay.classList.contains('open') ? closeA11yPanel() : openA11yPanel(); } break;
+      case 'm': if (!e.ctrlKey && !e.metaKey && micBtn && !micBtn.disabled) { e.preventDefault(); micBtn.click(); } break;
+      case 's': if (!e.ctrlKey && !e.metaKey && speakerBtn && !speakerBtn.disabled) { e.preventDefault(); speakerBtn.click(); } break;
+      case 'n': if (!e.ctrlKey && !e.metaKey) { e.preventDefault(); clearBtn.click(); } break;
+      case '/': e.preventDefault(); questionInput.focus(); break;
+      case 'escape':
+        if (a11yOverlay.classList.contains('open')) { closeA11yPanel(); }
+        else if (!hideScreen.classList.contains('active')) { hideScreen.classList.add('active'); if (speechSynthesis) speechSynthesis.cancel(); }
+        break;
+    }
+  });
+
+  // ===== QUICK HIDE SCREEN =====
+  const hideScreen = document.getElementById('hideScreen');
+  hideScreen.addEventListener('click', () => hideScreen.classList.remove('active'));
+  document.addEventListener('keydown', (e) => {
+    if (hideScreen.classList.contains('active') && e.key !== 'Escape') hideScreen.classList.remove('active');
+  }, true);
+
+  // ===== EMERGENCY TAB =====
+  const emergencyTab     = document.getElementById('emergencyTab');
+  const emergencyTrigger = document.getElementById('emergencyTabTrigger');
+  const emergencyClose   = document.getElementById('emergencyClose');
+  emergencyTrigger.addEventListener('click', () => emergencyTab.classList.toggle('open'));
+  emergencyClose.addEventListener('click', () => emergencyTab.classList.remove('open'));
+  document.addEventListener('click', (e) => { if (emergencyTab.classList.contains('open') && !emergencyTab.contains(e.target)) emergencyTab.classList.remove('open'); });
+
+  // Load a11y prefs
+  loadA11yPreferences();
+
+  } // end initChat
+
+  // If already authenticated on load, init chat immediately
+  if (chatContainer.classList.contains('show')) initChat();
+
+  // Called after successful login
+  window._respondInitChat = initChat;
+
+}); // end DOMContentLoaded
+</script>
+</body>
+</html>
