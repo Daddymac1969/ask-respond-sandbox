@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ask RESPOND Professional | DSL Consultation</title>
+  <title>Ask RESPOND Pro | Sandbox Demo</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHBhdGggZmlsbD0iIzFlMjkzYiIgZD0iTTE2IDFMMyA1djEwYzAgOSA1LjUgMTcuMyAxMyAyMCA3LjUtMi43IDEzLTExIDEzLTIwVjVMMTYgMXoiLz4KICA8cGF0aCBmaWxsPSIjMGQ5NDg4IiBkPSJNMTYgNWw5IDN2N2MwIDYuNS00IDEyLjUtOSAxNC41LTUtMi05LTgtOS0xNC41VjhsOS0zeiIvPgogIDx0ZXh0IHg9IjE2IiB5PSIyMSIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkQ8L3RleHQ+Cjwvc3ZnPg==">
   <!-- Preconnect to CDNs for faster loading -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -24,8 +24,8 @@
     .hide-screen-hint { position: absolute; bottom: 20px; font-size: 0.75rem; color: #ccc; }
     
     /* Login Screen */
-    .login-screen { min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem; overflow-y: auto; }
-    .login-box { background: rgba(255,255,255,0.1); border-radius: 24px; padding: 2rem; max-width: 580px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); margin: auto; }
+    .login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .login-box { background: rgba(255,255,255,0.1); border-radius: 24px; padding: 2.5rem; max-width: 400px; width: 100%; text-align: center; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(10px); }
     .login-dots { display: flex; justify-content: center; margin-bottom: 1.5rem; }
     .login-dots .respond-dots { gap: 8px; }
     .login-dots .respond-dots .dot { width: 14px; height: 14px; }
@@ -181,7 +181,7 @@
     .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .send-btn svg { width: 20px; height: 20px; fill: currentColor; }
     
-    .footer { text-align: center; padding: 0.75rem; color: rgba(255,255,255,0.95); font-size: 0.75rem; flex-shrink: 0; }
+    .footer { text-align: center; padding: 0.75rem; color: rgba(255,255,255,0.75); font-size: 0.75rem; flex-shrink: 0; }
     
     @media (max-width: 768px) {
       .ex-grid { grid-template-columns: 1fr; }
@@ -777,23 +777,11 @@
       }
       .priority-banner { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
-
-    /* RESPOND dots loading animation */
-    .respond-loading { display: flex; gap: 5px; align-items: center; padding: 4px 0; }
-    .respond-loading .dot { width: 10px; height: 10px; border-radius: 50%; opacity: 0.15; animation: respondPulse 1.4s infinite ease-in-out both; }
-    .respond-loading .dot-r { background: #0f172a; animation-delay: 0s; }
-    .respond-loading .dot-e { background: #235e4b; animation-delay: 0.2s; }
-    .respond-loading .dot-s { background: #a4684e; animation-delay: 0.4s; }
-    .respond-loading .dot-p { background: #cd372b; animation-delay: 0.6s; }
-    .respond-loading .dot-o { background: #ebaf24; animation-delay: 0.8s; }
-    .respond-loading .dot-n { background: #287bc9; animation-delay: 1.0s; }
-    .respond-loading .dot-d { background: #8625eb; animation-delay: 1.2s; }
-    @keyframes respondPulse { 0%, 60%, 100% { opacity: 0.15; transform: scale(0.8); } 30% { opacity: 1; transform: scale(1.2); } }
   </style>
 </head>
 <body>
 <div style="background:#f59e0b;color:#1e293b;text-align:center;padding:8px 16px;font-size:0.82rem;font-weight:600;letter-spacing:0.03em;z-index:9999;position:relative;">
-  &#9888; SANDBOX DEMO &nbsp;|&nbsp; This is a demonstration version of Ask RESPOND Pro. Data entered here is not monitored. &nbsp;|&nbsp; <a href="mailto:darren@respondsafeguarding.org" target="_blank" rel="noopener noreferrer" style="color:#1e293b;text-decoration:underline;">Request full access</a>
+  &#9888; SANDBOX DEMO &nbsp;|&nbsp; This is a demonstration version of Ask RESPOND Pro. Data entered here is not monitored. &nbsp;|&nbsp; <a href="mailto:darren@respondsafeguarding.org" style="color:#1e293b;text-decoration:underline;">Request full access</a>
 </div>
 
 
@@ -943,7 +931,6 @@
           </label>
         </div>
         
-        
         <div style="font-size:0.78rem;color:rgba(255,255,255,0.8);line-height:1.6;background:rgba(255,255,255,0.08);border-radius:10px;padding:0.9rem 1rem;margin:1rem 0;">
           <strong style="display:block;margin-bottom:0.35rem;color:rgba(255,255,255,0.95);">Privacy &amp; Data Notice</strong>
           This is a sandbox demonstration. Do not enter personally identifiable information or real case data.
@@ -951,7 +938,7 @@
           Inputs are processed via the Anthropic API in accordance with their
           <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener noreferrer" style="color:#f59e0b;text-decoration:underline;">privacy policy</a>.
           By continuing you confirm you are a safeguarding professional using this tool for evaluation purposes only.
-          Queries: <a href="mailto:darren@respondsafeguarding.org" target="_blank" rel="noopener noreferrer" style="color:#f59e0b;text-decoration:underline;">darren@respondsafeguarding.org</a>
+          Queries: <a href="mailto:darren@respondsafeguarding.org" style="color:#f59e0b;text-decoration:underline;">darren@respondsafeguarding.org</a>
         </div>
         <button class="login-btn" id="loginBtn" disabled>Access RESPOND</button>
       </div>
@@ -1006,7 +993,7 @@
 
   <!-- Pilot Banner -->
   <div class="pilot-banner">
-    SANDBOX DEMO — This is a demonstration version of Ask RESPOND Pro. For enquiries contact <a href="mailto:darren@respondsafeguarding.org" target="_blank" rel="noopener noreferrer">darren@respondsafeguarding.org</a><a href="mailto:darren@respondsafeguarding.org" target="_blank" rel="noopener noreferrer">darren@respondsafeguarding.org</a>
+    SANDBOX DEMO — This is a demonstration version of Ask RESPOND Pro. For enquiries contact <a href="mailto:darren@respondsafeguarding.org">darren@respondsafeguarding.org</a>
   </div>
 
   <!-- Accessibility Panel -->
@@ -1125,7 +1112,7 @@
       </div>
       
       <div class="contact-footer">
-        Or email directly: <a href="mailto:darren@respondsafeguarding.org" target="_blank" rel="noopener noreferrer">darren@respondsafeguarding.org</a>
+        Or email directly: <a href="mailto:darren@respondsafeguarding.org">darren@respondsafeguarding.org</a>
       </div>
     </div>
   </div>
@@ -1479,7 +1466,7 @@ document.addEventListener('DOMContentLoaded', function() {
     div.innerHTML = `
       <div class="avatar"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
       <div class="bubble bubble-bot streaming-bubble">
-        <div class="streaming-content"><div class="respond-loading"><div class="dot dot-r"></div><div class="dot dot-e"></div><div class="dot dot-s"></div><div class="dot dot-p"></div><div class="dot dot-o"></div><div class="dot dot-n"></div><div class="dot dot-d"></div></div></div>
+        <div class="streaming-content"><span class="loading-dots"><span>.</span><span>.</span><span>.</span></span></div>
         <span class="streaming-cursor" style="display:none;">▊</span>
       </div>
     `;
@@ -2108,7 +2095,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const errorDiv = document.createElement('div');
       errorDiv.className = 'form-error';
       errorDiv.style.cssText = 'background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:12px;border-radius:8px;margin-bottom:1rem;font-size:0.9rem;';
-      errorDiv.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Could not send message. Please email <a href="mailto:darren@respondsafeguarding.org" target="_blank" rel="noopener noreferrer">darren@respondsafeguarding.org</a> directly.';
+      errorDiv.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Could not send message. Please email <a href="mailto:darren@respondsafeguarding.org">darren@respondsafeguarding.org</a> directly.';
       contactBody.insertBefore(errorDiv, contactBody.firstChild.nextSibling);
     }
   });
@@ -2452,17 +2439,7 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
         </div>
         <div class="confidential">CONFIDENTIAL — This document may contain sensitive safeguarding information</div>
-      
-<script>
-  document.addEventListener('click', function(e) {
-    var a = e.target.closest('a[href^="mailto:darren@respondsafeguarding.org"]');
-    if (a) {
-      e.preventDefault();
-      window.open(a.href, '_blank', 'width=700,height=500,noopener,noreferrer');
-    }
-  });
-</script>
-</body>
+      </body>
       </html>
     `);
     printWindow.document.close();
@@ -2636,12 +2613,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const emergencyTabTrigger = document.getElementById('emergencyTabTrigger');
   const emergencyClose = document.getElementById('emergencyClose');
 
-  emergencyTabTrigger.addEventListener('click', (e) => {
-    e.stopPropagation();
+  emergencyTabTrigger.addEventListener('click', () => {
     emergencyTab.classList.toggle('open');
   });
-  emergencyClose.addEventListener('click', (e) => {
-    e.stopPropagation();
+  emergencyClose.addEventListener('click', () => {
     emergencyTab.classList.remove('open');
   });
   document.addEventListener('click', (e) => {
