@@ -1507,23 +1507,33 @@ document.addEventListener('DOMContentLoaded', function() {
       const cursor = bubble.querySelector('.streaming-cursor');
       if (cursor) cursor.remove();
       
-      // Check for priority tag and apply styling
-      let priorityClass = '';
-      if (content.includes('[PRIORITY:RED]')) priorityClass = 'priority-red';
-      else if (content.includes('[PRIORITY:AMBER]')) priorityClass = 'priority-amber';
-      else if (content.includes('[PRIORITY:GREEN]')) priorityClass = 'priority-green';
-      else if (content.includes('[PRIORITY:BLUE]')) priorityClass = 'priority-blue';
-      else if (content.includes('[PRIORITY:GREY]')) priorityClass = 'priority-grey';
-      
+      // Use formatMarkdown to strip priority tag, build banner, apply class
+      const formatted = formatMarkdown(content);
+      const priorityClass = formatted.priorityClass || '';
+
       if (priorityClass) {
         bubble.classList.remove('streaming-bubble');
         bubble.classList.add(priorityClass);
       }
-      
-      // Update content with parsed markdown
+
+      // Update content with properly formatted markdown + priority banner
       const contentEl = bubble.querySelector('.streaming-content');
       if (contentEl) {
-        contentEl.innerHTML = marked.parse(content);
+        contentEl.innerHTML = formatted.html;
+      }
+
+      // Add action buttons now that content is final
+      const existing = bubble.querySelector('.msg-actions');
+      if (!existing) {
+        const actions = document.createElement('div');
+        actions.className = 'msg-actions';
+        actions.innerHTML = '<button class="msg-action-btn print-btn" title="Print full conversation"><i class="fa-solid fa-print"></i> Print Chat</button>' +
+          '<button class="msg-action-btn copy-btn" title="Copy full conversation"><i class="fa-solid fa-copy"></i> Copy Chat</button>' +
+          '<button class="msg-action-btn speak-btn" title="Read this response aloud"><i class="fa-solid fa-volume-high"></i> Read</button>';
+        bubble.appendChild(actions);
+        actions.querySelector('.print-btn').addEventListener('click', () => printResponse(bubble));
+        actions.querySelector('.copy-btn').addEventListener('click', () => copyResponse(content, actions.querySelector('.copy-btn')));
+        actions.querySelector('.speak-btn').addEventListener('click', () => { if (window.speakBotResponse) window.speakBotResponse(content, bubble); });
       }
 
       // Trigger voice if enabled
