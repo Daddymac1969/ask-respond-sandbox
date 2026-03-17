@@ -1,14 +1,8 @@
 // Netlify serverless function for password verification
 // Passwords are stored as environment variables - never exposed to client
 
-const https = require("https");
-
-const GOOGLE_SHEET_URL =
-  process.env.GOOGLE_SHEET_URL ||
-  process.env.GOOGLE_SCRIPT_URL ||
-  "https://script.google.com/macros/s/AKfycbysOYqL1QYPovR1ilb4j0oUpXCv_ekh-2YQbezhdYVZw774DAgB3yoRDDZ3rOB0CKiN/exec";
-
 exports.handler = async (event) => {
+  // Only allow POST requests
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -16,20 +10,20 @@ exports.handler = async (event) => {
     };
   }
 
-  const codeMap = [
-    { env: "ACCESS_CODE_1",  value: process.env.ACCESS_CODE_1  },
-    { env: "ACCESS_CODE_2",  value: process.env.ACCESS_CODE_2  },
-    { env: "ACCESS_CODE_3",  value: process.env.ACCESS_CODE_3  },
-    { env: "ACCESS_CODE_4",  value: process.env.ACCESS_CODE_4  },
-    { env: "ACCESS_CODE_5",  value: process.env.ACCESS_CODE_5  },
-    { env: "ACCESS_CODE_6",  value: process.env.ACCESS_CODE_6  },
-    { env: "ACCESS_CODE_7",  value: process.env.ACCESS_CODE_7  },
-    { env: "ACCESS_CODE_8",  value: process.env.ACCESS_CODE_8  },
-    { env: "ACCESS_CODE_9",  value: process.env.ACCESS_CODE_9  },
-    { env: "ACCESS_CODE_10", value: process.env.ACCESS_CODE_10 },
-  ].filter(c => c.value);
+  const validPasswords = [
+    process.env.ACCESS_CODE_1,   // RESPOND-DEMO
+    process.env.ACCESS_CODE_2,   // DSLDEMO26
+    process.env.ACCESS_CODE_3,   // TRYRSPND
+    process.env.ACCESS_CODE_4,   // PROTEST26
+    process.env.ACCESS_CODE_5,   // SAFEGUARD1
+    process.env.ACCESS_CODE_6,   // KCSIE2025
+    process.env.ACCESS_CODE_7,   // ACTMODEL
+    process.env.ACCESS_CODE_8,   // THRESHOLD
+    process.env.ACCESS_CODE_9,   // DUTYOFCARE
+    process.env.ACCESS_CODE_10,  // PILOTDSL
+  ].filter(Boolean);
 
-  if (codeMap.length === 0) {
+  if (validPasswords.length === 0) {
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Access password not configured" }),
@@ -46,13 +40,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const matched = codeMap.find(c => c.value === password);
-    const isValid = !!matched;
-
-    if (isValid) {
-      // Log login event only — no content logged
-      logLogin(matched.env).catch(() => {});
-    }
+    const isValid = validPasswords.includes(password);
 
     return {
       statusCode: isValid ? 200 : 401,
@@ -71,26 +59,3 @@ exports.handler = async (event) => {
   }
 };
 
-async function logLogin(codeLabel) {
-  try {
-    const params = new URLSearchParams({
-      question: `[LOGIN] ${codeLabel}`,
-      response: "",
-      source: "SANDBOX-LOGIN",
-      meta: "",
-      ts: new Date().toISOString(),
-    });
-    const url = `${GOOGLE_SHEET_URL}?${params.toString()}`;
-    return new Promise((resolve) => {
-      https.get(url, (res) => {
-        if (res.statusCode === 301 || res.statusCode === 302) {
-          const loc = res.headers.location;
-          if (loc) https.get(loc, () => resolve()).on("error", () => resolve());
-          else resolve();
-        } else resolve();
-      }).on("error", () => resolve());
-    });
-  } catch {
-    // fail silently
-  }
-}
