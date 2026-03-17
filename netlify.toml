@@ -1,0 +1,33 @@
+[build]
+  command = "node scripts/build-doc-index.js"
+  functions = "netlify/functions"
+  publish = "."
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["https"]
+
+[functions."chat"]
+  timeout = 26
+
+[functions."contact"]
+  timeout = 10
+
+[functions."auth"]
+  timeout = 10
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Cache-Control = "no-store"
