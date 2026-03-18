@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ask RESPOND Pro — Sandbox User Guide</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 50px 40px;
+    }
+
+    /* Print Button */
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #1e293b;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 10pt;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      text-decoration: none;
+    }
+    .print-btn:hover { background: #0f172a; }
+    .print-btn svg { width: 16px; height: 16px; }
+
+    /* Header */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #1e293b;
+      margin-bottom: 40px;
+      font-size: 10pt;
+      color: #666;
+    }
+
+    .dots { font-size: 10pt; letter-spacing: 2px; }
+    .dots-large { font-size: 18pt; letter-spacing: 6px; }
+    .dots-footer { font-size: 12pt; letter-spacing: 4px; }
+
+    /* Title Section */
+    .title-section { text-align: center; margin-bottom: 35px; }
+    .title { font-size: 32pt; font-weight: 600; color: #1e293b; margin-bottom: 12px; }
+    .pro-badge {
+      display: inline-block;
+      background: linear-gradient(90deg, #0d9488 0%, #0f766e 100%);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 10pt;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .sandbox-badge {
+      display: inline-block;
+      background: transparent;
+      color: #0d9488;
+      border: 2px solid #0d9488;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 9pt;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .subtitle {
+      font-size: 13pt;
+      color: #666;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 12px;
+    }
+
+    /* Headings */
+    h1 {
+      font-size: 15pt;
+      font-weight: 600;
+      color: #1e293b;
+      margin: 35px 0 18px 0;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #1e293b;
+    }
+    h2 { font-size: 12pt; font-weight: 600; color: #1e293b; margin: 25px 0 12px 0; }
+    h3 { font-size: 11pt; font-weight: 600; color: #333; margin: 20px 0 10px 0; }
+
+    /* Content */
+    p { margin-bottom: 12px; }
+    ul, ol { margin: 12px 0 18px 0; padding-left: 24px; }
+    li { margin-bottom: 8px; }
+    li strong { color: #1e293b; }
+
+    /* Info Boxes */
+    .info-box {
+      padding: 16px 20px;
+      margin: 22px 0;
+      font-size: 10.5pt;
+      border: 3px solid;
+      border-radius: 0;
+    }
+    .info-box.teal { border-color: #0d9488; }
+    .info-box.amber { border-color: #d97706; }
+    .info-box.slate { border-color: #475569; }
+    .info-box.green { border-color: #16a34a; }
+    .info-box strong { color: #1e293b; }
+    .info-box .box-icon { margin-right: 8px; }
+    .box-icon.teal { color: #0d9488; }
+    .box-icon.amber { color: #d97706; }
+    .box-icon.slate { color: #475569; }
+    .box-icon.green { color: #16a34a; }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 10pt; }
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 10pt;
+      color: #1e293b;
+      border: 2px solid #1e293b;
+      border-bottom: 3px solid #1e293b;
+    }
+    td { padding: 12px 16px; border: 1px solid #999; vertical-align: top; }
+    td strong { color: #1e293b; }
+    .shortcuts-table td:first-child {
+      width: 80px;
+      text-align: center;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-weight: 700;
+      color: #1e293b;
+      border: 2px solid #1e293b;
+    }
+
+    /* Priority indicators */
+    .priority-row td:first-child { font-weight: 700; }
+    .p-red { color: #dc2626; }
+    .p-amber { color: #d97706; }
+    .p-green { color: #16a34a; }
+    .p-blue { color: #2563eb; }
+    .p-grey { color: #6b7280; }
+
+    /* Footer */
+    .page-footer { margin-top: 50px; padding-top: 25px; border-top: 2px solid #1e293b; text-align: center; }
+    .footer-text { font-size: 9pt; color: #666; line-height: 1.8; margin-top: 12px; }
+
+    .example { font-style: italic; color: #555; }
+    .note { font-size: 10pt; color: #666; font-style: italic; margin-top: 8px; }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #0d9488;
+      text-decoration: none;
+      font-size: 10pt;
+      font-weight: 600;
+    }
+    .back-link:hover { color: #0f766e; text-decoration: underline; }
+
+    @media print {
+      body { padding: 15px; margin: 0; font-size: 10pt; max-width: none; }
+      .print-btn { display: none !important; }
+      .page-break { page-break-before: always; }
+      h1, h2, h3 { page-break-after: avoid; }
+      .info-box, table, ul, ol { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn" onclick="window.print()">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+    </svg>
+    Print Guide
+  </button>
+
+  <div class="page-header">
+    <a href="index.html" class="back-link">&#8592; Back to sandbox</a>
+    <span class="dots">
+      <span style="color:#24437b;">&#9679;</span><span style="color:#235e4b;">&#9679;</span><span style="color:#a4684e;">&#9679;</span><span style="color:#cd372b;">&#9679;</span><span style="color:#ebaf24;">&#9679;</span><span style="color:#287bc9;">&#9679;</span><span style="color:#8625eb;">&#9679;</span>
+    </span>
+    <span>Ask RESPOND Pro &mdash; Sandbox Guide</span>
+  </div>
+
+  <div class="title-section">
+    <div class="title">Ask RESPOND <span class="pro-badge">PRO</span> <span class="sandbox-badge">SANDBOX</span></div>
+    <div class="dots-large">
+      <span style="color:#24437b;">&#9679;</span> <span style="color:#235e4b;">&#9679;</span> <span style="color:#a4684e;">&#9679;</span> <span style="color:#cd372b;">&#9679;</span> <span style="color:#ebaf24;">&#9679;</span> <span style="color:#287bc9;">&#9679;</span> <span style="color:#8625eb;">&#9679;</span>
+    </div>
+    <div class="subtitle">DSL Consultation Tool &mdash; Demo Environment</div>
+  </div>
+
+  <div class="info-box teal">
+    <span class="box-icon teal">&#9883;</span> <strong>Ask RESPOND Pro</strong> is a peer consultation tool designed for Designated Safeguarding Leads (DSLs), Deputy DSLs, and senior safeguarding professionals. This sandbox version gives you full access to the tool in a demo environment so you can evaluate it before committing to a full deployment.
+  </div>
+
+  <div class="info-box amber">
+    <span class="box-icon amber">&#9888;</span> <strong>Sandbox — not for live cases.</strong> This environment is for evaluation purposes only. Do not enter real names, school details, pupil information, or identifiable case data. Use fictional or anonymised scenarios.
+  </div>
+
+
+  <h1>What Ask RESPOND Pro Does</h1>
+  <ul>
+    <li><strong>Supports complex decision-making</strong> &mdash; threshold analysis (S17 vs S47), LADO referral criteria, multi-agency coordination</li>
+    <li><strong>Provides frameworks for thinking</strong> &mdash; not just answers, but structured approaches to weighing competing factors</li>
+    <li><strong>Embeds statutory knowledge</strong> &mdash; KCSIE 2025, Working Together 2023, Children Acts, court order pathways</li>
+    <li><strong>Offers contextual safeguarding analysis</strong> &mdash; 4Ps framework, extra-familial harm considerations, pattern recognition</li>
+    <li><strong>Supports defensible decision-making</strong> &mdash; language and reasoning that withstands scrutiny in reviews or inspections</li>
+    <li><strong>Respects your professional judgement</strong> &mdash; you remain accountable; the tool supports, not replaces, your expertise</li>
+  </ul>
+
+  <div class="info-box slate">
+    <span class="box-icon slate">&#9881;</span> <strong>Powered by RESPOND.</strong> Responses are grounded in the RESPOND Safeguarding Framework &mdash; a seven-step duty of care model (Recognise, Engage, Support, Pause, Offer, Notify, Document) &mdash; alongside the ACT theoretical foundation (Active Intervention, Contextual Safeguarding, Trauma-Informed Practice).
+  </div>
+
+
+  <h1>Getting Started</h1>
+
+  <h2>Accessing the Sandbox</h2>
+  <ol>
+    <li>Navigate to the sandbox URL you have been given</li>
+    <li>Enter your access code (provided by RESPOND Safeguarding)</li>
+    <li>Tick the checkbox confirming you understand this is a demo environment</li>
+    <li>Click <strong>Access Sandbox</strong></li>
+  </ol>
+  <p class="note">Access codes are single-use tracking codes assigned per evaluator. Each code is tied to one recipient so usage can be monitored. Do not share your code.</p>
+  <p class="note">Sessions last 4 hours from login. Closing the browser tab ends the session.</p>
+
+  <h2>Effective Consultation</h2>
+  <p>Ask RESPOND Pro works best when you give it context. Use fictional or anonymised scenarios that reflect the kinds of cases you actually deal with. The more specific the scenario, the more targeted the response.</p>
+
+  <h3>Example Prompts to Try</h3>
+  <ul>
+    <li><span class="example">"Help me think through whether this meets threshold for referral"</span></li>
+    <li><span class="example">"I'm unsure if this is LADO or internal &mdash; can we work through it?"</span></li>
+    <li><span class="example">"Multiple low-level concerns accumulating &mdash; when does it tip?"</span></li>
+    <li><span class="example">"Information sharing dilemma &mdash; family refusing consent"</span></li>
+    <li><span class="example">"Child-on-child case &mdash; how do I balance both children's needs?"</span></li>
+    <li><span class="example">"Strategy meeting prep &mdash; what should I be ready for?"</span></li>
+    <li><span class="example">"Parents are refusing to engage with early help. At what point does this become S47?"</span></li>
+    <li><span class="example">"I need to justify why I'm not referring to MASH despite concerns. Help me document the rationale."</span></li>
+  </ul>
+
+
+  <div class="page-break"></div>
+
+  <h1>Priority Classification</h1>
+
+  <p>Every response to a safeguarding concern opens with a colour-coded priority tag that signals the urgency level. This is reassessed on each turn &mdash; it does not carry forward automatically.</p>
+
+  <table>
+    <thead>
+      <tr><th style="width:120px;">Priority</th><th>Meaning</th></tr>
+    </thead>
+    <tbody class="priority-row">
+      <tr><td class="p-red"><strong>RED</strong></td><td>Immediate action required. Imminent or serious risk. Cannot wait.</td></tr>
+      <tr><td class="p-amber"><strong>AMBER</strong></td><td>Significant concern requiring action today. Not immediately life-threatening.</td></tr>
+      <tr><td class="p-green"><strong>GREEN</strong></td><td>Standard process. Manageable through normal channels without urgency.</td></tr>
+      <tr><td class="p-blue"><strong>BLUE</strong></td><td>Policy, legal, or procedural query. No active concern identified.</td></tr>
+      <tr><td class="p-grey"><strong>GREY</strong></td><td>General guidance, training, or administrative question.</td></tr>
+    </tbody>
+  </table>
+
+
+  <h1>Key Features</h1>
+
+  <table>
+    <thead>
+      <tr><th style="width:160px;">Feature</th><th>How It Supports DSLs</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Threshold Frameworks</strong></td><td>Structured analysis for S17 (Child in Need) vs S47 (Child Protection) decisions with indicator guidance</td></tr>
+      <tr><td><strong>LADO Criteria</strong></td><td>All four behaviour categories with application guidance</td></tr>
+      <tr><td><strong>Court Order Pathways</strong></td><td>EPO, Care Order, Supervision Order, Child Assessment Order &mdash; when each applies</td></tr>
+      <tr><td><strong>Multi-Agency Support</strong></td><td>Strategy discussion preparation, information sharing legal bases, MASH thresholds</td></tr>
+      <tr><td><strong>Risk Assessment</strong></td><td>RAG rating guidance with indicators for RED / AMBER / GREEN classification</td></tr>
+      <tr><td><strong>Contextual Safeguarding</strong></td><td>4Ps analysis (People, Places, Platforms, Patterns), extra-familial harm frameworks</td></tr>
+      <tr><td><strong>Decision Documentation</strong></td><td>Structures rationale for complex decisions in defensible, inspection-ready language</td></tr>
+      <tr><td><strong>Defensibility Test</strong></td><td>Every response frames actions through a defensibility lens &mdash; not inspection pressure</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Interface Features</h2>
+  <table>
+    <thead>
+      <tr><th style="width:140px;">Feature</th><th>How to Use</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Voice Input</strong></td><td>Click the <strong>microphone button</strong> to dictate complex scenarios instead of typing. Requires HTTPS and microphone permission.</td></tr>
+      <tr><td><strong>Voice Output</strong></td><td>Click the <strong>speaker button</strong> to have responses read aloud. Useful when reviewing documentation simultaneously.</td></tr>
+      <tr><td><strong>Print</strong></td><td>Click <strong>Print</strong> below any response to print the full conversation as a structured record with timestamp.</td></tr>
+      <tr><td><strong>Copy</strong></td><td>Click <strong>Copy</strong> to copy the full conversation to clipboard as plain text.</td></tr>
+      <tr><td><strong>Quick Hide</strong></td><td>Press <strong>Escape</strong> to instantly hide the screen. Click or press any key to return.</td></tr>
+      <tr><td><strong>New Chat</strong></td><td>Click <strong>New Chat</strong> to clear the conversation and start fresh. History is not retained.</td></tr>
+      <tr><td><strong>Accessibility</strong></td><td>Click the accessibility icon for text size, high contrast, dyslexia-friendly font, and reduced motion options.</td></tr>
+      <tr><td><strong>Emergency Panel</strong></td><td>Red tab on the right edge. Opens national emergency helplines (999, NSPCC, Childline, Prevent).</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Keyboard Shortcuts</h2>
+  <table class="shortcuts-table">
+    <thead>
+      <tr><th style="width:80px;">Key</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Esc</td><td>Quick hide screen</td></tr>
+      <tr><td>M</td><td>Toggle microphone (voice input)</td></tr>
+      <tr><td>S</td><td>Toggle speaker (voice output)</td></tr>
+      <tr><td>A</td><td>Open accessibility settings</td></tr>
+      <tr><td>N</td><td>New chat (clear conversation)</td></tr>
+      <tr><td>/</td><td>Focus on question input</td></tr>
+    </tbody>
+  </table>
+
+
+  <div class="page-break"></div>
+
+  <h1>What Ask RESPOND Pro Knows</h1>
+
+  <h2>Statutory Framework</h2>
+  <ul>
+    <li><strong>KCSIE 2025</strong> &mdash; DSL duties, Part 4 (allegations against staff), Part 5 (safer recruitment)</li>
+    <li><strong>Working Together 2023</strong> &mdash; multi-agency arrangements, threshold documents, information sharing</li>
+    <li><strong>Children Act 1989</strong> &mdash; S17, S20, S31, S43, S46, S47 duties and powers</li>
+    <li><strong>Children Act 2004</strong> &mdash; S10, S11, S14B&ndash;14D arrangements</li>
+    <li><strong>Education Acts</strong> &mdash; S175/S157 safeguarding duties</li>
+  </ul>
+
+  <h2>Embedded Knowledge</h2>
+  <ul>
+    <li>Threshold decision framework (S17 vs S47 indicators)</li>
+    <li>LADO referral criteria (all four behaviour categories)</li>
+    <li>Court orders and pre-proceedings pathways</li>
+    <li>Child Protection Conference process and DSL role</li>
+    <li>Section 47 enquiry outcomes</li>
+    <li>Immediate protection powers (EPO, PPO)</li>
+    <li>7 Golden Rules for information sharing</li>
+    <li>Contextual safeguarding (4Ps framework)</li>
+    <li>Professional optimism warning signs</li>
+    <li>RAG risk assessment indicators</li>
+  </ul>
+
+  <div class="info-box teal">
+    <span class="box-icon teal">&#9432;</span> <strong>Note on citations.</strong> Ask RESPOND Pro can quote directly from KCSIE 2025 and Working Together 2023 where the relevant passage supports the response. Quotes are referenced by document and paragraph. Where no direct quote is available, the tool uses unquoted statutory framing.
+  </div>
+
+
+  <h1>Professional Boundaries</h1>
+
+  <h2>What Pro Does NOT Do</h2>
+  <ul>
+    <li><strong>Make threshold decisions for you</strong> &mdash; it supports your thinking; you decide</li>
+    <li><strong>Give definitive legal advice</strong> &mdash; for specific legal questions, consult your legal team</li>
+    <li><strong>Replace multi-agency consultation</strong> &mdash; use it alongside, not instead of, professional discussions</li>
+    <li><strong>Guarantee outcomes</strong> &mdash; safeguarding involves uncertainty; the tool helps you manage that professionally</li>
+    <li><strong>Know your local protocols</strong> &mdash; it provides national guidance; you apply local context</li>
+    <li><strong>Tell you who your DSL is</strong> &mdash; the tool is for DSLs, not a route to them</li>
+  </ul>
+
+  <div class="info-box slate">
+    <span class="box-icon slate">&#9878;</span> <strong>Accountability:</strong> You remain accountable for all safeguarding decisions. Ask RESPOND Pro is a thinking partner, not a decision-maker. Document your reasoning, not just the tool's output.
+  </div>
+
+
+  <h1>Privacy &amp; Security in the Sandbox</h1>
+  <ul>
+    <li><strong>Do not enter real case information</strong> &mdash; this is an evaluation environment, not a live system</li>
+    <li><strong>No permanent storage</strong> &mdash; conversations are not logged or retained; closing the browser clears the session</li>
+    <li><strong>Sessions expire after 4 hours</strong> &mdash; for security, sessions are tab-scoped and close with the browser</li>
+    <li><strong>Access codes are tracked</strong> &mdash; usage is monitored per code to support the evaluation process</li>
+    <li><strong>Full deployment includes additional controls</strong> &mdash; the production version can include school-specific configurations, local contacts, and case management system integration</li>
+  </ul>
+
+
+  <h1>Evaluating the Sandbox</h1>
+
+  <h3>Things Worth Testing</h3>
+  <ul>
+    <li>Run a scenario you have dealt with recently (anonymised) &mdash; does the response reflect how you would think it through?</li>
+    <li>Ask a threshold question where the answer is genuinely uncertain &mdash; does the tool handle ambiguity professionally?</li>
+    <li>Test the LADO gate &mdash; raise a concern involving only children and check it doesn't mention LADO</li>
+    <li>Ask a non-safeguarding question &mdash; does it redirect appropriately without lecturing?</li>
+    <li>Try the voice input if you typically work hands-free</li>
+    <li>Use the print function &mdash; does the output work as a record you could file?</li>
+  </ul>
+
+  <h3>Questions to Consider</h3>
+  <ul>
+    <li>Does it sound like an experienced DSL, or like a generic AI?</li>
+    <li>Does it support your judgement rather than replacing it?</li>
+    <li>Is the priority classification (RED/AMBER/GREEN/BLUE/GREY) calibrated appropriately?</li>
+    <li>Would your team use this? What would they need from a full deployment?</li>
+  </ul>
+
+  <div class="info-box green">
+    <span class="box-icon green">&#10003;</span> <strong>Interested in a full deployment?</strong> The production version of Ask RESPOND Pro includes school-specific configuration, local safeguarding contacts, case management system integration, and usage analytics. Contact <strong>darren@respondsafeguarding.org</strong> to discuss.
+  </div>
+
+
+  <h1>Troubleshooting</h1>
+
+  <h3>"My access code isn't working"</h3>
+  <ul>
+    <li>Check the code is entered exactly as provided &mdash; the field auto-uppercases but watch for typos</li>
+    <li>Codes are case-insensitive and do not expire, but are specific to this sandbox deployment</li>
+    <li>Contact <strong>darren@respondsafeguarding.org</strong> if the code continues to fail</li>
+  </ul>
+
+  <h3>"The response is too slow"</h3>
+  <ul>
+    <li>Complex scenarios take a few seconds &mdash; this is normal; the model is reasoning through the question</li>
+    <li>If the request times out, try again &mdash; the sandbox uses the same infrastructure as the production tool</li>
+  </ul>
+
+  <h3>"The response is too cautious / non-committal"</h3>
+  <ul>
+    <li>Pro does not make decisions for you &mdash; this is intentional, not a limitation</li>
+    <li>Ask for frameworks, not just answers: <span class="example">"How should I think about this?"</span> rather than <span class="example">"What should I do?"</span></li>
+    <li>Provide more context about the complexity you're navigating</li>
+  </ul>
+
+  <h3>"The voice input isn't working"</h3>
+  <ul>
+    <li>Voice input requires a secure (HTTPS) connection and microphone permission in the browser</li>
+    <li>If the mic button is greyed out, check your browser's microphone settings</li>
+  </ul>
+
+
+  <div class="page-footer">
+    <div class="dots-footer">
+      <span style="color:#0f172a;">&#9679;</span> <span style="color:#0d9488;">&#9679;</span> <span style="color:#475569;">&#9679;</span> <span style="color:#64748b;">&#9679;</span> <span style="color:#0f766e;">&#9679;</span> <span style="color:#334155;">&#9679;</span> <span style="color:#1e293b;">&#9679;</span>
+    </div>
+    <div class="footer-text">
+      Ask RESPOND Pro is powered by the RESPOND Safeguarding Framework<br>
+      Sandbox demo &mdash; for evaluation purposes only &mdash; not for live cases<br>
+      &copy; 2026 RESPOND Safeguarding &nbsp;|&nbsp; &copy; TASIS England &nbsp;|&nbsp; <a href="https://respondsafeguarding.org" style="color:#0d9488;">respondsafeguarding.org</a> &nbsp;|&nbsp; <a href="privacy.html" style="color:#0d9488;">Privacy Notice</a>
+    </div>
+  </div>
+
+</body>
+</html>
