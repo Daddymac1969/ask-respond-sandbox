@@ -139,11 +139,11 @@
     .priority-grey { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3); }
 
     /* RAG Priority Bubble Backgrounds */
-    .bubble-priority-red { background: linear-gradient(180deg, rgba(254,226,226,1) 0%, rgba(254,242,242,0.95) 15%, rgba(255,255,255,0.98) 100%); border-left: 5px solid #dc2626 !important; box-shadow: 0 2px 12px rgba(220,38,38,0.15); }
-    .bubble-priority-amber { background: linear-gradient(180deg, rgba(254,243,199,1) 0%, rgba(255,251,235,0.95) 15%, rgba(255,255,255,0.98) 100%); border-left: 5px solid #f59e0b !important; box-shadow: 0 2px 12px rgba(245,158,11,0.15); }
-    .bubble-priority-green { background: linear-gradient(180deg, rgba(209,250,229,1) 0%, rgba(236,253,245,0.95) 15%, rgba(255,255,255,0.98) 100%); border-left: 5px solid #10b981 !important; box-shadow: 0 2px 12px rgba(16,185,129,0.15); }
-    .bubble-priority-blue { background: linear-gradient(180deg, rgba(219,234,254,1) 0%, rgba(239,246,255,0.95) 15%, rgba(255,255,255,0.98) 100%); border-left: 5px solid #3b82f6 !important; box-shadow: 0 2px 12px rgba(59,130,246,0.15); }
-    .bubble-priority-grey { background: linear-gradient(180deg, rgba(243,244,246,1) 0%, rgba(249,250,251,0.95) 15%, rgba(255,255,255,0.98) 100%); border-left: 5px solid #6b7280 !important; box-shadow: 0 2px 12px rgba(107,114,128,0.15); }
+    .bubble-priority-red { background: linear-gradient(180deg, rgba(254,226,226,1) 0%, rgba(254,242,242,0.95) 15%, rgba(255,255,255,0.98) 100%) !important; border-left: 5px solid #dc2626 !important; box-shadow: 0 2px 12px rgba(220,38,38,0.15); }
+    .bubble-priority-amber { background: linear-gradient(180deg, rgba(254,243,199,1) 0%, rgba(255,251,235,0.95) 15%, rgba(255,255,255,0.98) 100%) !important; border-left: 5px solid #f59e0b !important; box-shadow: 0 2px 12px rgba(245,158,11,0.15); }
+    .bubble-priority-green { background: linear-gradient(180deg, rgba(209,250,229,1) 0%, rgba(236,253,245,0.95) 15%, rgba(255,255,255,0.98) 100%) !important; border-left: 5px solid #10b981 !important; box-shadow: 0 2px 12px rgba(16,185,129,0.15); }
+    .bubble-priority-blue { background: linear-gradient(180deg, rgba(219,234,254,1) 0%, rgba(239,246,255,0.95) 15%, rgba(255,255,255,0.98) 100%) !important; border-left: 5px solid #3b82f6 !important; box-shadow: 0 2px 12px rgba(59,130,246,0.15); }
+    .bubble-priority-grey { background: linear-gradient(180deg, rgba(243,244,246,1) 0%, rgba(249,250,251,0.95) 15%, rgba(255,255,255,0.98) 100%) !important; border-left: 5px solid #6b7280 !important; box-shadow: 0 2px 12px rgba(107,114,128,0.15); }
 
     /* Typing Indicator */
     .typing-dots { display: flex; gap: 4px; padding: 4px 0; }
@@ -452,13 +452,13 @@
     <div class="logo">
 
       <div class="respond-dots" style="gap:5px;">
-        <div class="dot dot-r"></div>
-        <div class="dot dot-e"></div>
-        <div class="dot dot-s"></div>
-        <div class="dot dot-p"></div>
-        <div class="dot dot-o"></div>
-        <div class="dot dot-n"></div>
-        <div class="dot dot-d"></div>
+        <div class="dot" style="background:#24437b;"></div>
+        <div class="dot" style="background:#235e4b;"></div>
+        <div class="dot" style="background:#a4684e;"></div>
+        <div class="dot" style="background:#cd372b;"></div>
+        <div class="dot" style="background:#ebaf24;"></div>
+        <div class="dot" style="background:#287bc9;"></div>
+        <div class="dot" style="background:#8625eb;"></div>
       </div>
       <span class="logo-text">Ask <span style="font-weight:400;opacity:0.8">RESPOND</span> Pro</span>
     </div>
@@ -980,10 +980,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let priorityBanner = '';
     let priorityClass  = '';
-    const priorityMatch = text.match(/\[PRIORITY:(RED|AMBER|GREEN|BLUE|GREY)\]\s*/i);
+    const priorityMatch = text.match(/^\s*\[PRIORITY:(RED|AMBER|GREEN|BLUE|GREY)\][^\S\n]*/im);
     if (priorityMatch) {
       const level = priorityMatch[1].toUpperCase();
-      text = text.replace(/\[PRIORITY:(RED|AMBER|GREEN|BLUE|GREY)\]\s*/gi, '');
+      text = text.replace(/^\s*\[PRIORITY:(RED|AMBER|GREEN|BLUE|GREY)\][^\S\n]*\n?/gim, '').trim();
       const cfg = {
         RED:   { icon: 'fa-solid fa-circle-exclamation', label: 'IMMEDIATE ACTION NEEDED',        class: 'priority-red',   bubbleClass: 'bubble-priority-red' },
         AMBER: { icon: 'fa-solid fa-triangle-exclamation', label: 'REVIEW TODAY',                class: 'priority-amber', bubbleClass: 'bubble-priority-amber' },
