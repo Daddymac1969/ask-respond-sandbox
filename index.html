@@ -262,6 +262,26 @@
     .a11y-reset { width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; background: white; border-radius: 10px; font-size: 0.9rem; color: #6b7280; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; }
     .a11y-reset:hover { border-color: #1e293b; color: #1e293b; }
 
+    /* Contact Modal */
+    .contact-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+    .contact-overlay.active { opacity: 1; visibility: visible; }
+    .contact-panel { background: white; border-radius: 20px; width: 90%; max-width: 460px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); transform: scale(0.9) translateY(20px); transition: transform 0.3s ease; }
+    .contact-overlay.active .contact-panel { transform: scale(1) translateY(0); }
+    .contact-header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid #e5e7eb; background: linear-gradient(135deg, #1e293b 0%, #2c5282 100%); border-radius: 20px 20px 0 0; color: white; }
+    .contact-header h3 { font-size: 1.1rem; margin: 0; display: flex; align-items: center; gap: 0.5rem; }
+    .contact-close { width: 36px; height: 36px; border: none; background: rgba(255,255,255,0.15); color: white; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .contact-close:hover { background: rgba(255,255,255,0.25); }
+    .contact-body { padding: 1.5rem; }
+    .contact-intro { font-size: 0.9rem; color: #6b7280; margin-bottom: 1.25rem; line-height: 1.5; }
+    .contact-option { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 0.75rem; text-decoration: none; color: #1e293b; transition: all 0.2s; }
+    .contact-option:hover { border-color: #1e293b; background: #f8fafc; }
+    .contact-option-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem; }
+    .contact-option-icon.teal { background: #ccfbf1; color: #0f766e; }
+    .contact-option-icon.slate { background: #f1f5f9; color: #475569; }
+    .contact-option-text strong { display: block; font-size: 0.95rem; margin-bottom: 0.15rem; }
+    .contact-option-text span { font-size: 0.82rem; color: #6b7280; }
+    .contact-footer-note { font-size: 0.78rem; color: #9ca3af; text-align: center; margin-top: 1rem; }
+
     /* Message actions */
     .msg-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #f3f4f6; }
     .msg-action-btn { padding: 0.4rem 0.75rem; border: 1px solid #e5e7eb; background: #f9fafb; border-radius: 8px; font-size: 0.8rem; color: #6b7280; cursor: pointer; display: flex; align-items: center; gap: 0.4rem; transition: all 0.2s; }
@@ -395,6 +415,34 @@
   </div>
 </div>
 
+<!-- Contact Modal -->
+<div class="contact-overlay" id="contactOverlay" role="dialog" aria-label="Contact" aria-modal="true">
+  <div class="contact-panel">
+    <div class="contact-header">
+      <h3><i class="fa-solid fa-envelope"></i> Contact &amp; Feedback</h3>
+      <button class="contact-close" id="contactClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="contact-body">
+      <p class="contact-intro">Questions about the sandbox, feedback on the tool, or interested in a full deployment? Get in touch.</p>
+      <a class="contact-option" href="mailto:darren@respondsafeguarding.org?subject=Ask RESPOND Pro Sandbox">
+        <div class="contact-option-icon teal"><i class="fa-solid fa-envelope"></i></div>
+        <div class="contact-option-text">
+          <strong>darren@respondsafeguarding.org</strong>
+          <span>RESPOND Safeguarding — general enquiries, sandbox feedback, deployment</span>
+        </div>
+      </a>
+      <a class="contact-option" href="https://respondsafeguarding.org" target="_blank" rel="noopener">
+        <div class="contact-option-icon slate"><i class="fa-solid fa-globe"></i></div>
+        <div class="contact-option-text">
+          <strong>respondsafeguarding.org</strong>
+          <span>Framework information, case studies, and full platform details</span>
+        </div>
+      </a>
+      <p class="contact-footer-note">This is a sandbox demo. Do not send real case information by email.</p>
+    </div>
+  </div>
+</div>
+
 <!-- Skip Link -->
 <a href="#messages" class="skip-link">Skip to conversation</a>
 
@@ -417,9 +465,9 @@
       <span class="logo-text">Ask <span style="font-weight:400;opacity:0.8">RESPOND</span> Pro</span>
     </div>
     <div class="header-actions">
-      <a href="Ask_RESPOND_Pro_Sandbox_Guide.html" target="_blank" class="icon-btn" title="User Guide" aria-label="Open user guide">
+      <button class="icon-btn" title="User Guide" aria-label="Open user guide" onclick="window.open('Ask_RESPOND_Pro_Sandbox_Guide.html','_blank','noopener,noreferrer')">
         <i class="fa-solid fa-book-open"></i>
-      </a>
+      </button>
       <button class="icon-btn" id="contactBtn" title="Contact / Feedback" aria-label="Open contact form">
         <i class="fa-solid fa-envelope"></i>
       </button>
@@ -1219,6 +1267,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // ===== CONTACT MODAL =====
+  const contactOverlay = document.getElementById('contactOverlay');
+  const contactClose   = document.getElementById('contactClose');
+  const contactBtn     = document.getElementById('contactBtn');
+
+  function openContactModal() {
+    contactOverlay.classList.add('active');
+    contactClose.focus();
+  }
+  function closeContactModal() {
+    contactOverlay.classList.remove('active');
+    contactBtn.focus();
+  }
+
+  contactBtn.addEventListener('click', openContactModal);
+  contactClose.addEventListener('click', closeContactModal);
+  contactOverlay.addEventListener('click', (e) => {
+    if (e.target === contactOverlay) closeContactModal();
+  });
+
   // ===== KEYBOARD SHORTCUTS =====
   document.addEventListener('keydown', (e) => {
     const activeEl = document.activeElement;
@@ -1234,7 +1302,8 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'n': if (!e.ctrlKey && !e.metaKey) { e.preventDefault(); clearBtn.click(); } break;
       case '/': e.preventDefault(); questionInput.focus(); break;
       case 'escape':
-        if (a11yOverlay.classList.contains('open')) { closeA11yPanel(); }
+        if (contactOverlay.classList.contains('active')) { closeContactModal(); }
+        else if (a11yOverlay.classList.contains('open')) { closeA11yPanel(); }
         else if (!hideScreen.classList.contains('active')) { hideScreen.classList.add('active'); if (speechSynthesis) speechSynthesis.cancel(); }
         break;
     }
