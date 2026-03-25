@@ -677,10 +677,16 @@ document.addEventListener('DOMContentLoaded', function() {
   // Session timeout: 4 hours
   const SESSION_TIMEOUT_MS = 4 * 60 * 60 * 1000;
 
+  // Forward declaration — populated after initChat is defined below
+  window._respondInitChat = null;
+
   function showChat() {
     loginScreen.style.display = 'none';
     chatContainer.classList.add('show');
-    if (window._respondInitChat) window._respondInitChat();
+    // initChat may not be assigned yet on first parse — defer one tick
+    setTimeout(function() {
+      if (window._respondInitChat) window._respondInitChat();
+    }, 0);
   }
 
   // Check existing session
@@ -1393,8 +1399,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // ===== DOCUMENT UPLOAD =====
   const uploadBtn       = document.getElementById('uploadBtn');
   const uploadOverlay   = document.getElementById('uploadOverlay');
-  const uploadCancelBtn = document.getElementById('uploadCancelBtn');
-  const uploadConfirmBtn= document.getElementById('uploadConfirmBtn');
   const uploadPanelBody = document.getElementById('uploadPanelBody');
   const fileInput       = document.getElementById('fileInput');
   const docStatus       = document.getElementById('docStatus');
@@ -1438,8 +1442,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   uploadBtn.addEventListener('click', openUploadModal);
-  uploadCancelBtn.addEventListener('click', closeUploadModal);
-  uploadConfirmBtn.addEventListener('click', () => fileInput.click());
   uploadOverlay.addEventListener('click', (e) => { if (e.target === uploadOverlay) closeUploadModal(); });
   docStatusClear.addEventListener('click', clearDocument);
 
