@@ -179,6 +179,18 @@
     <li>Your accessibility preferences (text size, contrast, etc.) are stored in your browser's <code>localStorage</code> on your own device only. We cannot access these.</li>
   </ul>
 
+  <h2>Document uploads</h2>
+  <p>The sandbox includes an optional document upload facility. Where you choose to upload a document, the following applies:</p>
+  <ul>
+    <li><strong>Processing is entirely client-side.</strong> Text is extracted from your document within your browser using JavaScript libraries (PDF.js for PDF files, Mammoth for Word documents). The document file itself is never transmitted to the application server or to Netlify.</li>
+    <li><strong>Extracted text is held in browser memory for the session.</strong> The document text remains available in your browser tab so it can be referenced across multiple conversation turns. It exists only in JavaScript memory — not in localStorage, sessionStorage, or any server-side storage. When the tab closes, it is gone.</li>
+    <li><strong>The document is included in every API request for the session.</strong> Each message you send while a document is loaded will include the document text as context. This allows the AI to refer to it consistently across the conversation. The document is not stored by the application at any point.</li>
+    <li><strong>Documents are truncated at 12,000 characters</strong> to stay within API context limits.</li>
+  </ul>
+  <div class="info-box amber">
+    <span class="box-icon amber">&#9888;</span> <strong>Do not upload real documents.</strong> This is a demo environment. Do not upload any document containing real names, pupil information, staff details, medical information, or any other identifiable or confidential data. Use anonymised or fictional documents only.
+  </div>
+
   <h2>What the access code system records</h2>
   <p>Access codes are verified server-side at login. The verification process checks whether the code you enter matches a configured value. <strong>No record of which code was used, when, or by whom is written to any log or database.</strong> The codes exist solely to control access to the sandbox.</p>
 
