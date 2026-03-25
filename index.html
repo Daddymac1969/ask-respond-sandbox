@@ -10,8 +10,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #1e293b 0%, #334155 100%); overflow-x: hidden; }
@@ -284,39 +282,6 @@
     .contact-option-text span { font-size: 0.82rem; color: #6b7280; }
     .contact-footer-note { font-size: 0.78rem; color: #9ca3af; text-align: center; margin-top: 1rem; }
 
-    /* Upload */
-    .upload-btn { width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
-    .upload-btn:hover { background: rgba(255,255,255,0.25); }
-    .upload-btn.has-doc { background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); border-color: transparent; }
-    .upload-btn i { font-size: 1.1rem; }
-    .doc-status { display: none; align-items: center; gap: 0.5rem; background: rgba(13,148,136,0.2); border: 1px solid rgba(13,148,136,0.4); border-radius: 10px; padding: 0.4rem 0.75rem; margin-bottom: 0.4rem; font-size: 0.8rem; color: rgba(255,255,255,0.9); }
-    .doc-status.show { display: flex; }
-    .doc-status-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .doc-status-clear { background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; padding: 0 2px; font-size: 0.9rem; line-height: 1; }
-    .doc-status-clear:hover { color: white; }
-    .upload-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; }
-    .upload-overlay.active { opacity: 1; visibility: visible; }
-    .upload-panel { background: white; border-radius: 20px; width: 90%; max-width: 440px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); transform: scale(0.9) translateY(20px); transition: transform 0.3s; overflow: hidden; }
-    .upload-overlay.active .upload-panel { transform: scale(1) translateY(0); }
-    .upload-panel-header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
-    .upload-panel-header i { color: #f59e0b; font-size: 1.2rem; }
-    .upload-panel-header h3 { color: white; font-size: 1rem; margin: 0; }
-    .upload-panel-body { padding: 1.5rem; }
-    .upload-warning-box { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 10px; padding: 1rem 1.125rem; margin-bottom: 1.25rem; }
-    .upload-warning-box p { font-size: 0.875rem; color: #92400e; line-height: 1.6; margin-bottom: 0.5rem; }
-    .upload-warning-box p:last-child { margin-bottom: 0; }
-    .upload-warning-box strong { color: #78350f; }
-    .upload-formats { font-size: 0.8rem; color: #6b7280; margin-bottom: 1.25rem; }
-    .upload-formats span { display: inline-block; background: #f3f4f6; border-radius: 4px; padding: 0.15rem 0.5rem; margin: 0.2rem; font-family: monospace; font-size: 0.78rem; color: #374151; }
-    .upload-actions { display: flex; gap: 0.75rem; }
-    .upload-cancel-btn { flex: 1; padding: 0.75rem; border: 1px solid #e5e7eb; background: white; border-radius: 10px; font-size: 0.9rem; color: #6b7280; cursor: pointer; transition: all 0.2s; }
-    .upload-cancel-btn:hover { border-color: #374151; color: #374151; }
-    .upload-confirm-btn { flex: 2; padding: 0.75rem; border: none; background: #1e293b; border-radius: 10px; font-size: 0.9rem; font-weight: 600; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; }
-    .upload-confirm-btn:hover { background: #0f172a; }
-    .upload-processing { text-align: center; padding: 1.5rem; }
-    .upload-processing i { font-size: 2rem; color: #0d9488; margin-bottom: 0.75rem; }
-    .upload-processing p { font-size: 0.9rem; color: #6b7280; }
-
     /* Message actions */
     .msg-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #f3f4f6; }
     .msg-action-btn { padding: 0.4rem 0.75rem; border: 1px solid #e5e7eb; background: #f9fafb; border-radius: 8px; font-size: 0.8rem; color: #6b7280; cursor: pointer; display: flex; align-items: center; gap: 0.4rem; transition: all 0.2s; }
@@ -478,30 +443,6 @@
   </div>
 </div>
 
-<!-- Upload Warning Modal -->
-<div class="upload-overlay" id="uploadOverlay" role="dialog" aria-modal="true">
-  <div class="upload-panel">
-    <div class="upload-panel-header">
-      <i class="fa-solid fa-triangle-exclamation"></i>
-      <h3>Before you upload</h3>
-    </div>
-    <div class="upload-panel-body" id="uploadPanelBody">
-      <div class="upload-warning-box">
-        <p><strong>This is a sandbox demo environment.</strong> Do not upload documents containing real names, pupil information, staff details, or any other identifiable data.</p>
-        <p>Use anonymised or fictional documents only. Document text will be sent to the AI model for this message and is not stored by the application.</p>
-      </div>
-      <p class="upload-formats">Supported formats: <span>.pdf</span> <span>.docx</span> <span>.doc</span> <span>.txt</span></p>
-      <div class="upload-actions">
-        <button class="upload-cancel-btn" id="uploadCancelBtn">Cancel</button>
-        <button class="upload-confirm-btn" id="uploadConfirmBtn">
-          <i class="fa-solid fa-folder-open"></i> Choose file
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<input type="file" id="fileInput" accept=".pdf,.docx,.doc,.txt" style="display:none">
-
 <!-- Skip Link -->
 <a href="#messages" class="skip-link">Skip to conversation</a>
 
@@ -630,20 +571,12 @@
 
     <div class="input-area">
       <div class="voice-status" id="voiceStatus"></div>
-      <div class="doc-status" id="docStatus">
-        <i class="fa-solid fa-file-lines" style="color:#0d9488;font-size:0.85rem;flex-shrink:0;"></i>
-        <span class="doc-status-name" id="docStatusName"></span>
-        <button class="doc-status-clear" id="docStatusClear" title="Remove document"><i class="fa-solid fa-xmark"></i></button>
-      </div>
       <div class="input-wrap">
         <button class="voice-btn mic-btn" id="micBtn" title="Speak your question">
           <i class="fa-solid fa-microphone"></i>
         </button>
         <textarea class="input-field" id="questionInput" placeholder="Describe your scenario or question..." rows="3" aria-label="Describe your safeguarding scenario or question"></textarea>
         <div class="input-controls">
-          <button class="upload-btn" id="uploadBtn" title="Upload a document (anonymised only)">
-            <i class="fa-solid fa-paperclip"></i>
-          </button>
           <button class="voice-btn speaker-btn" id="speakerBtn" title="Toggle voice responses">
             <i class="fa-solid fa-volume-high"></i>
           </button>
@@ -677,16 +610,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Session timeout: 4 hours
   const SESSION_TIMEOUT_MS = 4 * 60 * 60 * 1000;
 
-  // Forward declaration — populated after initChat is defined below
-  window._respondInitChat = null;
-
   function showChat() {
     loginScreen.style.display = 'none';
     chatContainer.classList.add('show');
-    // initChat may not be assigned yet on first parse — defer one tick
-    setTimeout(function() {
-      if (window._respondInitChat) window._respondInitChat();
-    }, 0);
+    if (window._respondInitChat) window._respondInitChat();
   }
 
   // Check existing session
@@ -830,16 +757,8 @@ document.addEventListener('DOMContentLoaded', function() {
     welcome.style.display = 'none';
     clearBtn.classList.add('show');
 
-    // If a document is loaded, inject it into every message for the session
-    let displayQuestion = question;
-    let apiQuestion     = question;
-    if (pendingDocText) {
-      apiQuestion = '[DOCUMENT IN CONTEXT: ' + pendingDocName + ']\n' + pendingDocText + '\n[END DOCUMENT]\n\n' + question;
-      displayQuestion = question;
-    }
-
-    addMessage('user', displayQuestion);
-    history.push({ role: 'user', content: apiQuestion });
+    addMessage('user', question);
+    history.push({ role: 'user', content: question });
 
     const streamingEl = addStreamingMessage();
 
@@ -1394,133 +1313,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('keydown', (e) => {
     if (hideScreen.classList.contains('active') && e.key !== 'Escape') hideScreen.classList.remove('active');
   }, true);
-
-
-  // ===== DOCUMENT UPLOAD =====
-  const uploadBtn       = document.getElementById('uploadBtn');
-  const uploadOverlay   = document.getElementById('uploadOverlay');
-  const uploadPanelBody = document.getElementById('uploadPanelBody');
-  const fileInput       = document.getElementById('fileInput');
-  const docStatus       = document.getElementById('docStatus');
-  const docStatusName   = document.getElementById('docStatusName');
-  const docStatusClear  = document.getElementById('docStatusClear');
-
-  let pendingDocText = null;
-  let pendingDocName = null;
-
-  if (typeof pdfjsLib !== 'undefined') {
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  }
-
-  function openUploadModal() {
-    uploadPanelBody.innerHTML = `
-      <div class="upload-warning-box">
-        <p><strong>This is a sandbox demo environment.</strong> Do not upload documents containing real names, pupil information, staff details, or any other identifiable data.</p>
-        <p>Use anonymised or fictional documents only. Document text is sent to the AI model for this message only and is not stored by the application.</p>
-      </div>
-      <p class="upload-formats">Supported: <span>.pdf</span> <span>.docx</span> <span>.doc</span> <span>.txt</span></p>
-      <div class="upload-actions">
-        <button class="upload-cancel-btn" onclick="closeUploadModal()">Cancel</button>
-        <button class="upload-confirm-btn" onclick="document.getElementById('fileInput').click()">
-          <i class="fa-solid fa-folder-open"></i> Choose file
-        </button>
-      </div>`;
-    uploadOverlay.classList.add('active');
-  }
-
-  window.closeUploadModal = function() {
-    uploadOverlay.classList.remove('active');
-  };
-
-  function clearDocument() {
-    pendingDocName = null;
-    pendingDocText = null;
-    docStatus.classList.remove('show');
-    uploadBtn.classList.remove('has-doc');
-    questionInput.placeholder = 'Describe your scenario or question...';
-  }
-
-  uploadBtn.addEventListener('click', openUploadModal);
-  uploadOverlay.addEventListener('click', (e) => { if (e.target === uploadOverlay) closeUploadModal(); });
-  docStatusClear.addEventListener('click', clearDocument);
-
-  fileInput.addEventListener('change', async () => {
-    const file = fileInput.files[0];
-    if (!file) return;
-    fileInput.value = '';
-    const name = file.name;
-    const ext  = name.split('.').pop().toLowerCase();
-
-    uploadPanelBody.innerHTML = `
-      <div class="upload-processing">
-        <div style="font-size:2rem;color:#0d9488;margin-bottom:0.75rem;">
-          <i class="fa-solid fa-spinner" style="animation:spin 1s linear infinite;display:inline-block;"></i>
-        </div>
-        <p>Extracting text from ${escapeHtml(name)}...</p>
-      </div>`;
-    uploadOverlay.classList.add('active');
-
-    try {
-      let text = '';
-
-      if (ext === 'txt') {
-        text = await file.text();
-
-      } else if (ext === 'pdf') {
-        if (typeof pdfjsLib === 'undefined') throw new Error('PDF library not loaded — try refreshing the page.');
-        const ab = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
-        const parts = [];
-        for (let i = 1; i <= pdf.numPages; i++) {
-          const page = await pdf.getPage(i);
-          const tc = await page.getTextContent();
-          parts.push(tc.items.map(item => item.str).join(' '));
-        }
-        text = parts.join('
-
-');
-
-      } else if (ext === 'docx' || ext === 'doc') {
-        if (typeof mammoth === 'undefined') throw new Error('Word library not loaded — try refreshing the page.');
-        const ab = await file.arrayBuffer();
-        const result = await mammoth.extractRawText({ arrayBuffer: ab });
-        text = result.value;
-
-      } else {
-        throw new Error('Unsupported file type. Please use PDF, Word (.docx), or plain text (.txt).');
-      }
-
-      text = text.replace(/\s+/g, ' ').trim();
-
-      if (!text || text.length < 20) {
-        throw new Error('No readable text could be extracted. The file may be scanned, image-based, or empty.');
-      }
-
-      if (text.length > 12000) {
-        text = text.slice(0, 12000) + '\n\n[Document truncated at 12,000 characters]';
-      }
-
-      pendingDocName = name;
-      pendingDocText = text;
-      docStatusName.textContent = name + ' — active this session';
-      docStatus.classList.add('show');
-      uploadBtn.classList.add('has-doc');
-      closeUploadModal();
-      questionInput.placeholder = 'The document is in context — ask anything about it or continue your consultation...';
-      questionInput.focus();
-
-    } catch (err) {
-      uploadPanelBody.innerHTML = `
-        <div class="upload-warning-box">
-          <p><strong>Could not extract text from this file.</strong></p>
-          <p>${escapeHtml(err.message || 'Unknown error.')}</p>
-        </div>
-        <div class="upload-actions">
-          <button class="upload-cancel-btn" onclick="closeUploadModal()">Close</button>
-        </div>`;
-    }
-  });
 
   // ===== EMERGENCY TAB =====
   const emergencyTab     = document.getElementById('emergencyTab');

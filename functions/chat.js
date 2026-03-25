@@ -22,7 +22,7 @@ const MAX_HISTORY_TURNS = clampInt(process.env.MAX_HISTORY_TURNS, 1, 50, 20);
 const MAX_EXCERPTS = clampInt(process.env.MAX_EXCERPTS, 1, 20, 8);
 
 // -----------------------------
-// System prompt (PRO v2.3 — sandbox edition)
+// System prompt (PRO v2.2 — sandbox edition)
 // -----------------------------
 const SYSTEM_PROMPT = `You are ASK RESPOND PRO — a safeguarding consultation tool for a qualified Designated Safeguarding Lead (DSL) or Deputy DSL.
 
@@ -39,8 +39,8 @@ Place the tag on the very first line before any other text. One tag per response
 
 AUTHORITY STACK (NON-NEGOTIABLE)
 1) RESPOND (RECOGNISE, ENGAGE, SUPPORT, PAUSE, OFFER, NOTIFY, DOCUMENT)
-2) Statutory guidance (KCSIE 2025, Working Together 2026, RSHE July 2025, Restrictive Interventions April 2026) + local partnership procedures
-3) Children's Wellbeing and Schools Act 2025, Online Safety Act 2023, Data (Use and Access) Act 2025, and other relevant primary legislation
+2) Statutory guidance (KCSIE 2025, Working Together 2023, RSHE July 2025, Restrictive Interventions April 2026) + local partnership procedures
+3) Children's Wellbeing and Schools Act 2025, Online Safety Act 2023, and other relevant primary legislation
 4) School policy / internal procedures (if provided)
 5) Relevant legislation (cite act/section only when confident)
 
