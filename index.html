@@ -606,8 +606,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const loginBtn      = document.getElementById('loginBtn');
   const disclaimerCheck = document.getElementById('disclaimerCheck');
 
-  // Session timeout: 4 hours
-  const SESSION_TIMEOUT_MS = 4 * 60 * 60 * 1000;
+  // Server-issued bearer is memory-only. Reload requires fresh code entry.
+  let sandboxToken = null;
+  let sandboxExpiresAt = 0;
 
   function showChat() {
     loginScreen.style.display = 'none';
@@ -615,14 +616,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window._respondInitChat) window._respondInitChat();
   }
 
-  // Check existing session
-  try {
-    const auth = sessionStorage.getItem('respond-sandbox-auth');
-    const ts   = parseInt(sessionStorage.getItem('respond-sandbox-ts') || '0', 10);
-    if (auth === 'true' && Date.now() - ts < SESSION_TIMEOUT_MS) {
-      showChat();
-    }
-  } catch(e) {}
+  // No persistent login flags: a UI state cannot authorise backend requests.
 
   // Disclaimer gate
   disclaimerCheck.addEventListener('change', () => {
@@ -661,15 +655,17 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       const data = await res.json();
 
-      if (data.success) {
-        try {
-          sessionStorage.setItem('respond-sandbox-auth', 'true');
-          sessionStorage.setItem('respond-sandbox-ts', Date.now().toString());
-        } catch(e) {}
+      if (res.ok && data.success && typeof data.token === 'string' &&
+          Number.isSafeInteger(data.expiresAt) && data.expiresAt > Date.now()) {
+        sandboxToken = data.token;
+        sandboxExpiresAt = data.expiresAt;
+        codeInput.value = '';
         showChat();
       } else {
         codeInput.classList.add('error');
-        loginError.textContent = 'Invalid access code. Please check and try again.';
+        loginError.textContent = res.status === 503
+          ? 'Sandbox access is not configured. Please contact the operator.'
+          : 'Invalid access code. Please check and try again.';
         codeInput.value = '';
         codeInput.focus();
       }
@@ -748,6 +744,11 @@ document.addEventListener('DOMContentLoaded', function() {
   async function sendMessage() {
     const question = questionInput.value.trim();
     if (!question || isLoading) return;
+    if (!sandboxToken || Date.now() >= sandboxExpiresAt) {
+      sandboxToken = null;
+      window.location.reload();
+      return;
+    }
 
     isLoading = true;
     sendBtn.disabled = true;
@@ -764,7 +765,10 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
       const response = await fetch('/.netlify/functions/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + sandboxToken
+        },
         body: JSON.stringify({
           messages: history,
           clientDateTime: new Date().toLocaleString('en-GB', {
@@ -774,6 +778,11 @@ document.addEventListener('DOMContentLoaded', function() {
         })
       });
 
+      if (response.status === 401) {
+        sandboxToken = null;
+        window.location.reload();
+        return;
+      }
       if (!response.ok) throw new Error(`Server error: ${response.status}`);
 
       const contentType = response.headers.get('content-type');

@@ -1,61 +1,35 @@
-// netlify/functions/auth.js
-// Sandbox access code verification.
-// Checks against ACCESS_CODE_1 … ACCESS_CODE_10 environment variables.
-// Set each in Netlify: Site > Environment variables
-
-exports.handler = async (event) => {
-  const headers = {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-  };
-
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200, headers, body: "" };
+"use strict";
+// Deliberately gated preview candidate. Public-anonymous behaviour is NOT implied.
+const crypto = require("node:crypto");
+const {configuredSecret, issueSession} = require("../shared/sandbox-session");
+const HEADERS = {"Content-Type":"application/json","Cache-Control":"no-store"};
+const respond = (statusCode, body) => ({statusCode, headers:HEADERS, body:JSON.stringify(body)});
+const digest = value => crypto.createHash("sha256").update(value).digest();
+exports.handler = async event => {
+  if (event.httpMethod === "OPTIONS") return {statusCode:204,headers:HEADERS,body:""};
+  if (event.httpMethod !== "POST") return respond(405,{error:"Method not allowed"});
+  if (!configuredSecret()) return respond(503,{error:"Sandbox access not configured"});
+  const allowed = [];
+  for (let n=1; n<=10; n++) {
+    const code = process.env["ACCESS_CODE_" + n];
+    if (typeof code === "string" && code.trim() && code.length <= 128)
+      allowed.push(digest(code.trim().toUpperCase()));
   }
-
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, headers, body: JSON.stringify({ error: "Method not allowed" }) };
-  }
-
-  // Collect all configured access codes
-  const validCodes = [];
-  for (let i = 1; i <= 10; i++) {
-    const code = process.env[`ACCESS_CODE_${i}`];
-    if (code && code.trim()) validCodes.push(code.trim().toUpperCase());
-  }
-
-  if (validCodes.length === 0) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: "No access codes configured" }),
-    };
-  }
-
-  let body;
-  try {
-    body = JSON.parse(event.body || "{}");
-  } catch {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid request" }) };
-  }
-
-  const submitted = (body.code || "").trim().toUpperCase();
-
-  if (!submitted) {
-    return { statusCode: 400, headers, body: JSON.stringify({ success: false, error: "Access code required" }) };
-  }
-
-  const isValid = validCodes.includes(submitted);
-
-  return {
-    statusCode: isValid ? 200 : 401,
-    headers,
-    body: JSON.stringify(
-      isValid
-        ? { success: true }
-        : { success: false, error: "Invalid access code" }
-    ),
-  };
+  if (!allowed.length) return respond(503,{error:"Sandbox access not configured"});
+  if (typeof event.body !== "string" || event.body.length > 512)
+    return respond(400,{error:"Invalid request"});
+  let payload;
+  try { payload = JSON.parse(event.body); }
+  catch (_) {return respond(400,{error:"Invalid request"});}
+  const code = payload?.code;
+  if (typeof code !== "string" || !code.trim() || code.length > 128)
+    return respond(400,{success:false,error:"Invalid access code"});
+  const candidate = digest(code.trim().toUpperCase());
+  let valid = false;
+  for (const expected of allowed)
+    valid = crypto.timingSafeEqual(candidate, expected) || valid;
+  if (!valid) return respond(401,{success:false,error:"Invalid access code"});
+  const session = issueSession();
+  if (!session) return respond(503,{error:"Sandbox access not configured"});
+  return respond(200,{success:true,...session});
 };

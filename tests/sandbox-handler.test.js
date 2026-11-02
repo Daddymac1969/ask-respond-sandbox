@@ -3,11 +3,19 @@
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
 process.env.ANTHROPIC_API_KEY = "SYNTHETIC_ONLY_NON_SECRET";
+process.env.SANDBOX_SESSION_SECRET = "SYNTHETIC_ONLY_RANDOM_SESSION_KEY_LONGER_THAN_32_BYTES";
+process.env.ACCESS_CODE_1 = "SYNTHETIC_ACCESS_CODE";
+const session = require("../netlify/shared/sandbox-session");
+const auth = require("../netlify/functions/auth");
 process.env.DOC_INDEX_PATH = "/nonexistent-synthetic-index.json";
 const { handler } = require("../netlify/functions/chat");
 const u = content => ({role:"user",content});
 const a = content => ({role:"assistant",content});
-const req = payload => ({httpMethod:"POST",body:JSON.stringify(payload)});
+const req = payload => ({
+  httpMethod:"POST",
+  headers:{authorization:"Bearer " + session.issueSession().token},
+  body:JSON.stringify(payload)
+});
 let outbound=0;
 async function withFakeProvider(event, provider) {
   const prior=global.fetch;
@@ -17,7 +25,13 @@ async function withFakeProvider(event, provider) {
     if (!provider) throw Error("Unexpected model call");
     return provider(...args);
   };
-  try {return await handler(event);} finally {global.fetch=prior;}
+  try {
+    // Existing coverage concerns validated inputs; supply a synthetic session
+    // only when this helper receives a manually constructed unauthenticated request.
+    const covered = event.httpMethod === "POST" && !event.headers
+      ? {...event, headers:req({}).headers} : event;
+    return await handler(covered);
+  } finally {global.fetch=prior;}
 }
 async function reject(messages, expected=400) {
   const result=await withFakeProvider(req({messages}));
@@ -133,4 +147,76 @@ test("synthetic markup is escaped in streaming formatter",()=>{
   assert.doesNotMatch(rendered,/<img\b/);
   assert.match(rendered,/&lt;img/);
   assert.match(rendered,/<strong>bold<\/strong>/);
+});
+
+test("server-issued token is valid, expires and rejects tampering",()=>{
+  const issued=session.issueSession(1000000);
+  assert.ok(issued.token);
+  assert.equal(session.verifyToken(issued.token,1000000),true);
+  assert.equal(session.verifyToken(issued.token,1000000 + 30*60*1000),false);
+  const tampered=issued.token.slice(0,-3)+"zzz";
+  assert.equal(session.verifyToken(tampered,1000001),false);
+  assert.equal(session.verifyToken("not-a-token",1000001),false);
+});
+test("session secret missing or short makes both issuance and verification fail",()=>{
+  const original=process.env.SANDBOX_SESSION_SECRET;
+  try {
+    delete process.env.SANDBOX_SESSION_SECRET;
+    assert.equal(session.issueSession(),null);
+    assert.equal(session.verifyToken("anything"),false);
+    process.env.SANDBOX_SESSION_SECRET="short";
+    assert.equal(session.issueSession(),null);
+  }finally{process.env.SANDBOX_SESSION_SECRET=original;}
+});
+test("correct code returns a signed session and privacy-safe headers",async()=>{
+  const r=await auth.handler({httpMethod:"POST",body:JSON.stringify({code:"synthetic_access_code"})});
+  assert.equal(r.statusCode,200);
+  assert.notEqual(r.headers["Access-Control-Allow-Origin"],"*");
+  assert.equal(r.headers["Cache-Control"],"no-store");
+  const d=JSON.parse(r.body);
+  assert.equal(d.success,true);
+  assert.ok(Number.isSafeInteger(d.expiresAt) && d.expiresAt>Date.now());
+  assert.ok(session.verifyToken(d.token));
+});
+test("incorrect or malformed access-code requests fail closed",async()=>{
+  for(const e of [
+    {httpMethod:"POST",body:JSON.stringify({code:"wrong"})},
+    {httpMethod:"POST",body:JSON.stringify({code:12})},
+    {httpMethod:"POST",body:"{not-json"},
+    {httpMethod:"POST",body:JSON.stringify({code:"x".repeat(200)})}
+  ]){
+    const r=await auth.handler(e);
+    assert.ok([400,401].includes(r.statusCode));
+    assert.doesNotMatch(r.body,/SYNTHETIC_ACCESS_CODE/);
+  }
+});
+test("missing configured signing key or access codes rejects login",async()=>{
+  const oldKey=process.env.SANDBOX_SESSION_SECRET,oldCode=process.env.ACCESS_CODE_1;
+  try {
+    delete process.env.SANDBOX_SESSION_SECRET;
+    assert.equal((await auth.handler({httpMethod:"POST",body:'{"code":"synthetic_access_code"}'})).statusCode,503);
+    process.env.SANDBOX_SESSION_SECRET=oldKey;
+    delete process.env.ACCESS_CODE_1;
+    assert.equal((await auth.handler({httpMethod:"POST",body:'{"code":"synthetic_access_code"}'})).statusCode,503);
+  } finally {
+    process.env.SANDBOX_SESSION_SECRET=oldKey;
+    process.env.ACCESS_CODE_1=oldCode;
+  }
+});
+test("chat rejects missing and forged tokens before provider calls",async()=>{
+  const original=global.fetch; let calls=0;
+  global.fetch=async()=>{calls++;throw Error("Synthetic unexpected provider call");};
+  try{
+    for(const headers of [{},{authorization:"Bearer forged.token"},{authorization:"Bearer "+session.issueSession(1000000).token}]){
+      const r=await handler({httpMethod:"POST",headers,body:JSON.stringify({messages:[u("fictional test")]})});
+      assert.equal(r.statusCode,401);
+    }
+    assert.equal(calls,0);
+  }finally{global.fetch=original;}
+});
+test("browser sends signed bearer and does not restore client-only auth flags",()=>{
+  assert.match(html,/['"]Authorization['"]:\s*['"]Bearer ['"] \+ sandboxToken/);
+  assert.match(html,/sandboxExpiresAt/);
+  assert.doesNotMatch(html,/sessionStorage\.(getItem|setItem)\(['"]respond-sandbox-auth/);
+  assert.match(html,/response\.status === 401/);
 });

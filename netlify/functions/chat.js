@@ -11,6 +11,7 @@
 // - MAX_HISTORY_TURNS (default: 20)
 // - MAX_EXCERPTS (default: 8)
 
+const {verifyRequest} = require("../shared/sandbox-session");
 const fs = require("fs");
 const path = require("path");
 
@@ -254,6 +255,12 @@ exports.handler = async (event) => {
 
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, headers, body: JSON.stringify({ error: "Method not allowed" }) };
+  }
+
+  // Access-code login must be enforced here, not merely by the browser.
+  // Verify before parsing input, accessing retrieval or making a provider call.
+  if (!verifyRequest(event.headers || {})) {
+    return { statusCode: 401, headers, body: JSON.stringify({ error: "Authentication required or session expired" }) };
   }
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
