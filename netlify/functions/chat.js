@@ -20,6 +20,10 @@ const path = require("path");
 const DEFAULT_DOC_INDEX_PATH = process.env.DOC_INDEX_PATH || "data/doc_index.json";
 const MAX_HISTORY_TURNS = clampInt(process.env.MAX_HISTORY_TURNS, 1, 50, 20);
 const MAX_EXCERPTS = clampInt(process.env.MAX_EXCERPTS, 1, 20, 8);
+// Public demo: bound all requests before any model call. This is NOT distributed rate limiting.
+const MAX_REQUEST_CHARS = 72000;
+const MAX_CONTEXT_CHARS = 60000;
+const MAX_MESSAGE_CHARS = 12000;
 
 // -----------------------------
 // System prompt (PRO v2.3 — sandbox edition)
@@ -241,9 +245,6 @@ Keep it practical, inspection-safe, and in British English. Where restrictive in
 exports.handler = async (event) => {
   const headers = {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Cache-Control": "no-store",
   };
 
@@ -257,24 +258,34 @@ exports.handler = async (event) => {
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: "ANTHROPIC_API_KEY not configured" }) };
+    return { statusCode: 503, headers, body: JSON.stringify({ error: "Guidance service unavailable" }) };
   }
 
+  if (typeof event.body !== "string" || event.body.length > MAX_REQUEST_CHARS) {
+    return { statusCode: 413, headers, body: JSON.stringify({ error: "Request exceeds demo limits" }) };
+  }
   let payload;
   try {
     payload = JSON.parse(event.body || "{}");
   } catch {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid JSON" }) };
   }
-
-  const incomingMessages = Array.isArray(payload.messages) ? payload.messages : [];
-  const clientDateTime = payload.clientDateTime || null;
-  if (!incomingMessages.length) {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: "Missing messages" }) };
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid request" }) };
   }
+  if (payload.clientDateTime != null &&
+      (typeof payload.clientDateTime !== "string" || payload.clientDateTime.length > 128)) {
+    return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid date/time" }) };
+  }
+  const clientDateTime = payload.clientDateTime || null;
 
-  // Normalise and trim history
-  const trimmed = normalizeAndTrimMessages(incomingMessages, MAX_HISTORY_TURNS);
+  // Reject malformed histories before retrieval or any chargeable model request.
+  let trimmed;
+  try {
+    trimmed = normalizeAndTrimMessages(payload.messages, MAX_HISTORY_TURNS);
+  } catch {
+    return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid or oversized conversation" }) };
+  }
 
   // Current user question
   const lastUser = findLastUserMessage(trimmed);
@@ -322,15 +333,14 @@ exports.handler = async (event) => {
 
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      const msg = data?.error?.message || `API error (${response.status})`;
-      return { statusCode: response.status, headers, body: JSON.stringify({ error: msg }) };
+      return { statusCode: 502, headers, body: JSON.stringify({ error: "Guidance service temporarily unavailable" }) };
     }
 
     const responseText = extractAnthropicText(data);
 
     return { statusCode: 200, headers, body: JSON.stringify({ content: responseText }) };
-  } catch (err) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: `Server error: ${err.message}` }) };
+  } catch {
+    return { statusCode: 502, headers, body: JSON.stringify({ error: "Guidance service temporarily unavailable" }) };
   }
 };
 
@@ -344,7 +354,7 @@ function loadDocIndex(relPath) {
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
   } catch (err) {
-    console.error("Doc index not available:", err.message);
+    console.error("Doc index not available");
     return [];
   }
 }
@@ -416,17 +426,31 @@ function injectReferenceText(messages, referenceTextBlock) {
 // Input normalisation / safety
 // -----------------------------
 function normalizeAndTrimMessages(messages, maxTurns) {
-  const cleaned = [];
-  for (const m of messages) {
-    if (!m || typeof m !== "object") continue;
-    const role = m.role === "assistant" ? "assistant" : "user";
-    const content = (m.content ?? "").toString();
-    const clipped = content.length > 12000 ? content.slice(0, 12000) : content;
-    if (!clipped.trim()) continue;
-    cleaned.push({ role, content: clipped });
+  if (!Array.isArray(messages) || messages.length === 0 || messages.length > 100) {
+    throw new Error("Invalid message count");
   }
   const cap = Math.max(2, maxTurns * 2);
-  return cleaned.length > cap ? cleaned.slice(cleaned.length - cap) : cleaned;
+  const selected = messages.slice(-cap);
+  const cleaned = [];
+  let total = 0;
+  for (const m of selected) {
+    if (!m || typeof m !== "object" || Array.isArray(m) ||
+        (m.role !== "user" && m.role !== "assistant") ||
+        typeof m.content !== "string") {
+      throw new Error("Invalid message role/content");
+    }
+    const content = m.content.trim();
+    if (!content || content.length > MAX_MESSAGE_CHARS) {
+      throw new Error("Empty or oversized message");
+    }
+    total += content.length;
+    if (total > MAX_CONTEXT_CHARS) throw new Error("Oversized context");
+    cleaned.push({ role: m.role, content });
+  }
+  if (cleaned[cleaned.length - 1]?.role !== "user") {
+    throw new Error("Question must be last");
+  }
+  return cleaned;
 }
 
 function findLastUserMessage(messages) {
