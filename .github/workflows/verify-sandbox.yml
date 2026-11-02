@@ -1,0 +1,20 @@
+name: Sandbox synthetic security checks
+on:
+  push:
+    branches: [audit/sandbox-bounded-errors-20261102]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  synthetic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax and offline security regressions
+        run: |
+          node --check netlify/functions/chat.js
+          node --check tests/sandbox-handler.test.js
+          node --test tests/sandbox-handler.test.js

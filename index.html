@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif; min-height: 100vh; background: linear-gradient(135deg, #1e293b 0%, #334155 100%); overflow-x: hidden; }
@@ -848,7 +847,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const contentEl = el.querySelector('.streaming-content');
     const cursor    = el.querySelector('.streaming-cursor');
     if (contentEl) {
-      contentEl.innerHTML = typeof marked !== 'undefined' ? marked.parse(content) : formatMarkdownBasic(content);
+      contentEl.innerHTML = formatMarkdownBasic(content);
       if (cursor) cursor.style.display = 'inline-block';
       messages.scrollTop = messages.scrollHeight;
     }
@@ -898,12 +897,13 @@ document.addEventListener('DOMContentLoaded', function() {
     div.innerHTML = `
       <div class="avatar"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
       <div class="bubble bubble-bot bubble-error">
-        <p>${errorMsg}</p>
-        <button class="retry-btn" onclick="retryQuestion('${escapeHtml(originalQuestion).replace(/'/g, "\\'")}')">
+        <p>${escapeHtml(errorMsg)}</p>
+        <button class="retry-btn" >
           <i class="fa-solid fa-rotate-right"></i> Try Again
         </button>
       </div>`;
     messages.appendChild(div);
+    div.querySelector('.retry-btn').addEventListener('click', () => window.retryQuestion(originalQuestion));
     messages.scrollTop = messages.scrollHeight;
   }
 
