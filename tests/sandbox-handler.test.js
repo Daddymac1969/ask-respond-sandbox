@@ -103,3 +103,34 @@ test("provider thrown errors are not returned to the caller",async()=>{
   assert.equal(outbound,1);assert.equal(r.statusCode,502);
   assert.doesNotMatch(r.body,/PRIVATE_SYNTHETIC_EXCEPTION/);
 });
+
+
+const fs = require("node:fs");
+const path = require("node:path");
+const vm = require("node:vm");
+const html = fs.readFileSync(path.join(__dirname,"../index.html"),"utf8");
+test("all sandbox inline browser scripts parse without execution",()=>{
+  const scripts=[...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
+  assert.ok(scripts.length>0);
+  for(const [,script] of scripts) new vm.Script(script,{filename:"sandbox-inline.js"});
+});
+test("streaming model text never passes through unsanitised marked renderer",()=>{
+  assert.doesNotMatch(html,/marked\.parse\(/);
+  assert.match(html,/contentEl\.innerHTML = formatMarkdownBasic\(content\)/);
+});
+test("retry input is bound as text rather than interpolated into executable onclick markup",()=>{
+  assert.doesNotMatch(html,/onclick="retryQuestion\(/);
+  assert.match(html,/addEventListener\('click', \(\) => window\.retryQuestion\(originalQuestion\)\)/);
+  assert.match(html,/<p>\$\{escapeHtml\(errorMsg\)\}<\/p>/);
+});
+test("synthetic markup is escaped in streaming formatter",()=>{
+  const start=html.indexOf("  function formatMarkdownBasic(text) {");
+  const end=html.indexOf("\n  function formatMarkdown(text) {",start);
+  assert.ok(start>=0&&end>start);
+  const escapeHtml=text=>String(text).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const fmt=vm.runInNewContext(html.slice(start,end)+"\nformatMarkdownBasic", {escapeHtml});
+  const rendered=fmt('<img src=x onerror="SYNTHETIC" /> **bold**');
+  assert.doesNotMatch(rendered,/<img\b/);
+  assert.match(rendered,/&lt;img/);
+  assert.match(rendered,/<strong>bold<\/strong>/);
+});
